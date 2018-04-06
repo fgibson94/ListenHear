@@ -1,3 +1,22 @@
+var fakeData = [
+  Cowboy Dude = {
+    genre: "country",
+    venue: "303 Country Venue Ln."
+  },
+  Ranch Gal = {
+    genre: "country",
+    venue: "303 Country Venue Ln."
+  },
+  Deathmetal Dave = {
+    genre: "metal",
+    venue: "14 Warehouse Rd."
+  },
+  Dustin Beaver = {
+    genre: "pop",
+    venue: "100 Main St."
+  },  
+]
+
 var session = {
   zip: ,
   radius: ,
