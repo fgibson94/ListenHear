@@ -5,3 +5,9 @@ display:none
 */
 }
 
+.event-wrapper{
+  display:inline-block;
+  background-color:rosybrown;
+  padding:20px;
+  margin:10px;
+}

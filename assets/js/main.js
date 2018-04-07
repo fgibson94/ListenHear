@@ -18,10 +18,22 @@ var fakeData = [
     name: "Dustin Beaver",
     genre: "pop",
     venue: "100 Main St."
+  },
+  {
+    name: "DJ Bingo",
+    genre: "trance",
+    venue: "14 Warehouse Rd."
+  },
+  {
+    name: "Frankie Lovejoy",
+    genre: "rock",
+    venue: "100 Main St."
   }
 ];
 
-var session = {
+let colors = ['#1be3c9','#6abd75','#b986e0','#32f57d','#eccd52','#f198b2'];
+
+let session = {
   zip: '',
   radius: '',
   seatgeekResponse: [],
@@ -38,7 +50,7 @@ function zipError(errorMessage) {
   }, 1000);
 };
 
-function validateZip(zip){
+function validateZip(zip) {
   if (zip.length != 5) {
     zipError("invalid zip length");
     return;
@@ -74,6 +86,33 @@ $("#launch-button").on("click", function () {
     bounceIn('#sort-page');
   }
 })
+
+function loadFakeData() {
+  fakeData.forEach(datum => {
+    let randomNum = Math.round(Math.random() * colors.length);
+    let color = colors[randomNum];
+    console.log(color);
+    let index = fakeData.indexOf(datum);
+    var html =
+      `
+    <div id="datum-wrapper-${index}" class="container ${datum.genre}">
+      <div id="datum-name-${index}">${datum.name}</div>
+      <div id="datum-venue-${index}">${datum.venue}</div>
+    </div>
+    `;
+    let event = $("<div>")
+    .attr('id','event-wrapper'+index)
+    .addClass('event-wrapper')
+    .css('background-color',color)
+    .html(html);
+
+    $("#event-container").append(event);
+  });
+};
+
+$("#get-data").on('click', function () {
+  loadFakeData();
+});
 
 //DISPLAY
 

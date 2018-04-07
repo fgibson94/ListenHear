@@ -38,6 +38,28 @@ modal goes here
   - groups to select from (e.g. genres)
   - tap genre (or other group?) to get to "playlist selection"
    -->
+    <div class="container">
+      <!-- temporary... to pull in fake data -->
+      <div class="row">
+        <button id="get-data" type="button" class="btn btn-sm btn-info">get data</button>
+      </div>
+
+      <div class="row">
+        <label for="sort-options">sort by...</label>
+      </div>
+      <div class="row">
+        <div id="sort-options" class="btn-group" role="group" aria-label="sort by options">
+          <button type="button" class="btn btn-lg btn-secondary">genre</button>
+          <button type="button" class="btn btn-lg  btn-secondary">alpha</button>
+          <button type="button" class="btn btn-lg  btn-secondary">distance</button>
+        </div>
+        <button type="button" class="btn  btn-lg btn-info">select all</button>
+      </div>
+      <div class="row">
+        <div id="event-container"></div>
+      </div>
+
+    </div>
   </section>
 
   <section id="selection-page" class="animated">
