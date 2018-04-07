@@ -17,13 +17,13 @@ h1{
     display: block;
 }
 #sort-page{
-    display: none;
+    display: block;
 }
 #selection-page{
-    display: none;
+    display: block;
 }
 #playlist-page{
-    display: none;
+    display: block;
 }
 a {
     text-decoration: none;
