@@ -31,17 +31,13 @@ var fakeData = [
   }
 ];
 
-let colors = ['#1be3c9','#6abd75','#b986e0','#32f57d','#eccd52','#f198b2'];
+let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
 
 let session = {
   zip: '',
   radius: '',
-  spotifyResponse: [],
-  playlistURL: '',
+  EVENT_ARR: [],
 }
-
-var ARTIST_ARR = []
-var VENUE_ARR = []
 
 //HELPER FUNCTIONS
 
@@ -49,71 +45,115 @@ function zipError(errorMessage) {
   $('#zip').val(errorMessage).css('color', 'red');
   setTimeout(function () {
     $('#zip').val("enter zip").css('color', 'black');
-  }, 1000);
+  }, 2000);
 };
 
-function validateZip(zip) {
+function radiusError(errorMessage) {
+  $('#radius').val(errorMessage).css('color', 'red');
+  setTimeout(function () {
+    $('#radius').val("enter zip").css('color', 'black');
+  }, 2000);
+};
+
+function validateInput() {
+  let zip = $("#zip").val().trim();
+  let radius = $("#radius").val().trim();
+  console.log(zip);
+  console.log(radius);
+  //handle zip
   if (zip.length != 5) {
-    zipError("invalid zip length");
-    return;
+    zipError("enter 5 digit zip");
+    console.log("zip length err");
+    return false;
   }
   for (let i = 0; i < zip.length; i++) {
-    if (typeof zip.charAt(i) != 'number') {
+    if ( isNaN(zip.charAt(i)) ) {
       zipError("invalid zip");
-      return;
+      console.log("zip err");
+      return false;
     }
   }
+  //handle radius
+  if (radius == ""){
+    radiusError("enter a number");
+    return false;
+  }
+  for (let j = 0; j < radius.length; j++) {
+    console.log(radius.charAt(j))
+    if ( isNaN(radius.charAt(j)) ) {
+      radiusError("enter a number");
+      console.log("radius err");
+      return false;
+    }
+  }
+  //set session vars & return true if conditions met
+  session.zip = zip;
+  session.radius = radius;
   return true;
 }
 
+// API functions
+
 function callSpotify() {
-  var accessToken = "BQDdHv7U5MBvA4HpuTMGmXsJ3Bxxti37fxxOQt2tO9mgpse5Uv7mTMQQ7JNEIsXnqaYtiG1p371lUXRI0_hzyGwTxpv66Y8LVZv_sNJfYfI1vMYE_nhaaVwvnHDnjVJ53usZMlmMJKyox_ednaN2YK2UdzIzVLRsqJH_pyYCzdnKs84"
-  for (var i = 0; i < ARTIST_ARR.length; i++) {
-  $.ajax({
-    url: "https://api.spotify.com/v1/search?q=" + ARTIST_ARR[3] + "&type=artist",
-    headers: {
+  //var accessToken = "BQDdHv7U5MBvA4HpuTMGmXsJ3Bxxti37fxxOQt2tO9mgpse5Uv7mTMQQ7JNEIsXnqaYtiG1p371lUXRI0_hzyGwTxpv66Y8LVZv_sNJfYfI1vMYE_nhaaVwvnHDnjVJ53usZMlmMJKyox_ednaN2YK2UdzIzVLRsqJH_pyYCzdnKs84"
+  let accessToken = "BQAKOWayUwGkwnHqv405j2ueNgMw8OL4-KJssHSpuQjnrW4CHkoVJUqv8CZy1SeooxqlOBS7zghslNXCvAb0ZUOWBOTBpwhV4zCmBSCb54BjysHFDs0Z-n456D_5CAn4mHqQwv2GW9Ae2dWlHMT5uFystj8v9GY"
+  //optionally: use forEach?
+  for (let i = 0; i < session.EVENT_ARR.length; i++) {
+    $.ajax({
+      url: "https://api.spotify.com/v1/search?q=" + session.EVENT_ARR[i].artist + "&type=artist",
+      headers: {
         'Authorization': 'Bearer ' + accessToken
-    },
-    success: function(responseSpotify) {
-        console.log(responseSpotify)
-    }
-  });
+      },
+      success: function (response) {
+        console.log(response);
+        let genres = response.artists.items["0"].genres;
+        genres.forEach(genre =>{
+          session.EVENT_ARR[i].genres.push(genre);  
+        });
+      }
+    });
   };
-} 
+}
+
 function callSeatGeek() {
   event.preventDefault();
-  ZIP = $("#zipcodeInput").val().trim();
-  DIST = $("#distInput").val().trim();
-  DATE = moment().format("YYYY-MM-DD");
-  console.log(DATE)
+  const ZIP = session.zip;
+  const DIST = session.radius;
+  const DATE = moment().format("YYYY-MM-DD");
+  console.log(DATE, " ", ZIP, " ", DIST);
   var queryURL = "https://api.seatgeek.com/2/events?type=concert&per_page=1000&postal_code=" + ZIP + "&range=" + DIST + "mi&client_id=MTExMzAwNzR8MTUyMjk4NDcwNS4xNg"
   $.ajax({
     url: queryURL,
     method: "GET"
-  }).then(function(response) {
+  }).then(function (response) {
+    //clear session on new search
+    session.EVENT_ARR = [];
+    //optionally: use forEach?
     for (var i = 0; i < response.events.length; i++) {
-      var timeChecker = response.events[i].datetime_local
-      var timeCheckerTwo = moment(timeChecker).format("YYYY-MM-DD")
+      let timeChecker = response.events[i].datetime_local
+      let timeCheckerTwo = moment(timeChecker).format("YYYY-MM-DD")
       if (timeCheckerTwo == DATE) {
-      var artistName = response.events[i].performers[0].name
-      var venueName = response.events[i].venue.name
-      ARTIST_ARR.push(artistName);
-      VENUE_ARR.push(venueName);
-      /* $("#artistsDiv").append(
-        `
-        <div class="tile col resultCard">
-            <p class="tileTitle">${response.events[i].performers[0].name} | <i>${response.events[i].venue.name}</i></p>
+        //build event array of artists/venues
+        let artistName = response.events[i].performers[0].name
+        let venueName = response.events[i].venue.name
+        let event = {};
+        event.artist = artistName;
+        event.venue = venueName;
+        event.genres = [];
+        session.EVENT_ARR.push(event);
+        /* $("#artistsDiv").append(
+          `
+          <div class="tile col resultCard">
+              <p class="tileTitle">${response.events[i].performers[0].name} | <i>${response.events[i].venue.name}</i></p>
+            </div>
           </div>
         </div>
-      </div>
-      `
-      )} */
-    } 
-  }
-  callSpotify()
-
-})
-  console.log(ARTIST_ARR);
+        `
+        )} */
+      }
+    }
+  callSpotify();
+  })
 }
 
 
@@ -127,50 +167,47 @@ function load() {
 $("#launch-button").on("click", function () {
   let proceed = validateInput();
   if (proceed) {
-    //set session.zip
-    //set session.radius
-    //callseatGeek();
-    bounceOut("#landing-page")
-    bounceIn('#sort-page');
+    callSeatGeek();
+    //bounceOut("#landing-page")
+    //bounceIn('#sort-page');
   }
 })
 
-function sortGenre(){
+function sortGenre() {
   $('.grid').isotope({
     filter: '.country'
   });
 };
 
-$('#sort-page').on('click', '#genre-filter', function(){
-  console.log('here');
+$('#sort-page').on('click', '#genre-filter', function () {
   sortGenre();
 });
 
-function loadFakeData() {
+function loadEvents() {
   $("#event-container").html("");
-  fakeData.forEach(datum => {
+  session.EVENT_ARR.forEach(event => {
     let randomNum = Math.round(Math.random() * colors.length);
     let color = colors[randomNum];
-    
-    let index = fakeData.indexOf(datum);
+
+    let index = session.EVENT_ARR.indexOf(event);
     var html =
       `
-      <div id="datum-name-${index}">${datum.name}</div>
-      <div id="datum-venue-${index}">${datum.venue}</div>
+      <div id="datum-name-${index}">${event.artist}</div>
+      <div id="datum-venue-${index}">${event.venue}</div>
     `;
-    let event = $("<div>")
-    .attr('id','event-wrapper'+index)
-    .addClass('event-wrapper grid-item')
-    .addClass(datum.genre)
-    .css('background-color',color)
-    .html(html);
+    let eventTile = $("<div>")
+      .attr('id', 'event-wrapper' + index)
+      .addClass('event-wrapper grid-item')
+      .addClass(event.genres)
+      .css('background-color', color)
+      .html(html);
 
-    $("#event-container").append(event);
+    $("#event-container").append(eventTile);
   });
 };
 
 $("#get-data").on('click', function () {
-  loadFakeData();
+  loadEvents();
 });
 
 //DISPLAY
@@ -196,4 +233,3 @@ function bounceOut(section) {
 $(document).ready(function () {
   //load();
 })
-$("#submitBtn").on("click", callSeatGeek);

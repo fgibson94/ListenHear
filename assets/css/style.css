@@ -1,14 +1,12 @@
-#modal,#sort-page,#selection-page,#playlist-page {
-    /* 
-    eventually we'll want these hidden when the page first loads
-    display:none 
-    */
-    }
-    
+#modal,#jumbotron,#selection-page,#playlist-page {
+    display:none;
+}
+
 .jumbotron{
     text-align: center;
 
 }
+
 h1{
     font-size: 600%;
 }
@@ -26,18 +24,6 @@ h1{
     width: 150%;
     height: 150%;
     border-radius: 1%;
-}
-#landing-page{
-    display: block;
-}
-#sort-page{
-    display: block;
-}
-#selection-page{
-    display: block;
-}
-#playlist-page{
-    display: block;
 }
 a {
     text-decoration: none;
