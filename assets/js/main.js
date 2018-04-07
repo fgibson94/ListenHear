@@ -91,18 +91,17 @@ function loadFakeData() {
   fakeData.forEach(datum => {
     let randomNum = Math.round(Math.random() * colors.length);
     let color = colors[randomNum];
-    console.log(color);
+    
     let index = fakeData.indexOf(datum);
     var html =
       `
-    <div id="datum-wrapper-${index}" class="container ${datum.genre}">
       <div id="datum-name-${index}">${datum.name}</div>
       <div id="datum-venue-${index}">${datum.venue}</div>
-    </div>
     `;
     let event = $("<div>")
     .attr('id','event-wrapper'+index)
     .addClass('event-wrapper')
+    .addClass(datum.genre)
     .css('background-color',color)
     .html(html);
 
