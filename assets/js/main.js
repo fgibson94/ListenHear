@@ -122,7 +122,6 @@ function callSeatGeek() {
 function load() {
   bounceIn("#landing-page");
   //get location/prompt for location?
-
 }
 
 $("#launch-button").on("click", function () {
@@ -136,7 +135,19 @@ $("#launch-button").on("click", function () {
   }
 })
 
+function sortGenre(){
+  $('.grid').isotope({
+    filter: '.country'
+  });
+};
+
+$('#sort-page').on('click', '#genre-filter', function(){
+  console.log('here');
+  sortGenre();
+});
+
 function loadFakeData() {
+  $("#event-container").html("");
   fakeData.forEach(datum => {
     let randomNum = Math.round(Math.random() * colors.length);
     let color = colors[randomNum];
@@ -149,7 +160,7 @@ function loadFakeData() {
     `;
     let event = $("<div>")
     .attr('id','event-wrapper'+index)
-    .addClass('event-wrapper')
+    .addClass('event-wrapper grid-item')
     .addClass(datum.genre)
     .css('background-color',color)
     .html(html);
@@ -186,6 +197,3 @@ $(document).ready(function () {
   //load();
 })
 $("#submitBtn").on("click", callSeatGeek);
-
-
-

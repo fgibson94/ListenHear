@@ -44,7 +44,6 @@
                     <button class="btn btn-dark" id="spotifyBtn" type="submit">Spotify</button>
                 </form>
             </div>
-
         </div>
     </div>
     <hr>
@@ -98,7 +97,50 @@
                 </div>
             </div>
         </div>
-    
+      <section id="modal" class="animated">
+    <!-- 
+modal goes here
+ -->
+  </section>
+
+  <section id="landing-page" class="animated">
+    <!-- 
+1 zip field     id="zip"
+-input validation
+
+2 radius        id="radius"
+- https://getbootstrap.com/docs/4.0/components/dropdowns/
+
+3 launch button id="launch-button"
+ -->
+  </section>
+
+  <section id="sort-page" class="animated">
+    <!-- 
+  "sort page" goes here:
+  - groups to select from (e.g. genres)
+  - tap genre (or other group?) to get to "playlist selection"
+   -->
+    <div class="container">
+      <!-- temporary... to pull in fake data -->
+      <div class="row">
+        <button id="get-data" type="button" class="btn btn-sm btn-info">get data</button>
+      </div>
+
+      <div class="row">
+        <label for="sort-options">sort by...</label>
+      </div>
+      <div class="row">
+        <div id="sort-options" class="btn-group" role="group" aria-label="sort by options">
+          <button id="genre-filter" type="button" class="btn btn-lg btn-secondary">genre (country rn)</button>
+          <button type="button" class="btn btn-lg  btn-secondary">alpha</button>
+          <button type="button" class="btn btn-lg  btn-secondary">distance</button>
+        </div>
+        <button type="button" class="btn  btn-lg btn-info">remove filters</button>
+      </div>
+      <div class="row">
+        <div id="event-container" class="grid"></div>
+      </div>
     </div>
     <hr>
     <div class="container animated" id="playlist-page">
