@@ -36,10 +36,12 @@ let colors = ['#1be3c9','#6abd75','#b986e0','#32f57d','#eccd52','#f198b2'];
 let session = {
   zip: '',
   radius: '',
-  seatgeekResponse: [],
   spotifyResponse: [],
   playlistURL: '',
 }
+
+var ARTIST_ARR = []
+var VENUE_ARR = []
 
 //HELPER FUNCTIONS
 
@@ -64,9 +66,56 @@ function validateZip(zip) {
   return true;
 }
 
-function callseatGeek() {
-  //whatever we do, eventually set response to session.seatgeekResponse
+function callSpotify() {
+  var accessToken = "BQDdHv7U5MBvA4HpuTMGmXsJ3Bxxti37fxxOQt2tO9mgpse5Uv7mTMQQ7JNEIsXnqaYtiG1p371lUXRI0_hzyGwTxpv66Y8LVZv_sNJfYfI1vMYE_nhaaVwvnHDnjVJ53usZMlmMJKyox_ednaN2YK2UdzIzVLRsqJH_pyYCzdnKs84"
+  for (var i = 0; i < ARTIST_ARR.length; i++) {
+  $.ajax({
+    url: "https://api.spotify.com/v1/search?q=" + ARTIST_ARR[3] + "&type=artist",
+    headers: {
+        'Authorization': 'Bearer ' + accessToken
+    },
+    success: function(responseSpotify) {
+        console.log(responseSpotify)
+    }
+  });
+  };
+} 
+function callSeatGeek() {
+  event.preventDefault();
+  ZIP = $("#zipcodeInput").val().trim();
+  DIST = $("#distInput").val().trim();
+  DATE = moment().format("YYYY-MM-DD");
+  console.log(DATE)
+  var queryURL = "https://api.seatgeek.com/2/events?type=concert&per_page=1000&postal_code=" + ZIP + "&range=" + DIST + "mi&client_id=MTExMzAwNzR8MTUyMjk4NDcwNS4xNg"
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    for (var i = 0; i < response.events.length; i++) {
+      var timeChecker = response.events[i].datetime_local
+      var timeCheckerTwo = moment(timeChecker).format("YYYY-MM-DD")
+      if (timeCheckerTwo == DATE) {
+      var artistName = response.events[i].performers[0].name
+      var venueName = response.events[i].venue.name
+      ARTIST_ARR.push(artistName);
+      VENUE_ARR.push(venueName);
+      /* $("#artistsDiv").append(
+        `
+        <div class="tile col resultCard">
+            <p class="tileTitle">${response.events[i].performers[0].name} | <i>${response.events[i].venue.name}</i></p>
+          </div>
+        </div>
+      </div>
+      `
+      )} */
+    } 
+  }
+  callSpotify()
+
+})
+  console.log(ARTIST_ARR);
 }
+
 
 //WORKFLOW
 
@@ -136,3 +185,7 @@ function bounceOut(section) {
 $(document).ready(function () {
   //load();
 })
+$("#submitBtn").on("click", callSeatGeek);
+
+
+
