@@ -1,91 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Page Title</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-  <link rel="stylesheet" type="text/css" media="screen" href="assets/css/main.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ListenHear</title>
+    <!-- Add Bootstrap !-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <!---CSS!-->
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
+<!--HTML WIREFRAME!-->
 
 <body>
+    <div class="jumbotron">
+        <h1>ListenHear</h1>
+    </div>
+    <section class="displayHere">
+        <!--This is where the divs shows up on the webpage!-->
+    </section>
+    <!--These are the separate pages !-->
+    <div class="container animated" id="landing-page">
+        <a href="#" class="previous">&laquo; Previous</a>
+        <a href="#" class="next">Next &raquo;</a>
+        <div class="row">
+            <div class="col">
+                <form>
+                    <div class="form-group">
+                        <label for="zip-input">Zip Code: </label>
+                        <input type="text" class="form-control" id="zipcodeInput" aria-describedby="zipCodeInput" placeholder="Enter Your Zip Code">
 
-  <section id="modal" class="animated">
-    <!-- 
-modal goes here
- -->
-  </section>
+                    </div>
+                    <div class="form-group">
+                        <label for="range-input">Range: </label>
+                        <input type="text" class="form-control" id="distInput" placeholder="How Far Do You Want to Travel?">
+                    </div>
 
-  <section id="landing-page" class="animated">
-    <!-- 
-1 zip field     id="zip"
--input validation
 
-2 radius        id="radius"
-- https://getbootstrap.com/docs/4.0/components/dropdowns/
+                    <button class="btn btn-dark" id="submitBtn" type="submit">Submit</button>
+                    <button class="btn btn-dark" id="spotifyBtn" type="submit">Spotify</button>
+                </form>
+            </div>
 
-3 launch button id="launch-button"
- -->
-  </section>
-
-  <section id="sort-page" class="animated">
-    <!-- 
-  "sort page" goes here:
-  - groups to select from (e.g. genres)
-  - tap genre (or other group?) to get to "playlist selection"
-   -->
-    <div class="container">
-      <!-- temporary... to pull in fake data -->
-      <div class="row">
-        <button id="get-data" type="button" class="btn btn-sm btn-info">get data</button>
-      </div>
-
-      <div class="row">
-        <label for="sort-options">sort by...</label>
-      </div>
-      <div class="row">
-        <div id="sort-options" class="btn-group" role="group" aria-label="sort by options">
-          <button type="button" class="btn btn-lg btn-secondary">genre</button>
-          <button type="button" class="btn btn-lg  btn-secondary">alpha</button>
-          <button type="button" class="btn btn-lg  btn-secondary">distance</button>
         </div>
-        <button type="button" class="btn  btn-lg btn-info">select all</button>
-      </div>
-      <div class="row">
-        <div id="event-container"></div>
-      </div>
+    </div>
+
+        <!-- //Form
+        //ZipCode
+        //Radius
+        //Inputs -->
 
     </div>
-  </section>
+    <div class="container animated" id="sort-page">
+        <a href="#" class="previous">&laquo; Previous</a>
+        <a href="#" class="next">Next &raquo;</a>
+        <!-- //Table
+        //Artist playing near you
+        //Genre groups
+        //Distance
+         -->
+        <div class="row">
+            <div class="col">
+                <table id="artistInTown">
+                    <thead id="tableHeader">
+                        <th>Artist Name</th>
+                        <th>Concert Date</th>
+                        <th>Location</th>
+                        <th>Genre</th>
+                    </thead>
+                    <tbody>
+                        <tr id="tableRow">
+                            <td>Weezer</td>
+                            <td>04/07/2018</td>
+                            <td>Raleigh</td>
+                            <td>Alternative</td>
+                        </tr>
+                    </tbody>
 
-  <section id="selection-page" class="animated">
-    <!-- 
-  "selection page" goes here:
-  - list of bands and venues with checkboxes
-  - "check all" option
-  - potentially a dropdown for each item on the list that links to google maps, etc
-   -->
-  </section>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container animated" id="selection-page">
+        <a href="#" class="previous">&laquo; Previous</a>
+        <a href="#" class="next">Next &raquo;</a>
+        <div class="row">
+            <!--//list of bands and venues 
+                //check one/ all options -->
+            <div class="row">
+                <div class="col">
+                    <form action="">
+                        <input type="checkbox" class="userChoices"> Band1
+                        <br>
+                        <input type="checkbox" class="userChoices"> Band2
+                        <br>
+                        <input type="checkbox" class="userChoices"> Band2
+                    </form>
+                </div>
+            </div>
+        </div>
 
-  <section id="playlist-page" class="animated">
-    <!-- 
-  "playlist page" goes here:
-  - assuming we can embed the playlist in the app
-   -->
-  </section>
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-  <script src="assets/js/main.js"></script>
+    </div>
+    <div class="container animated" id="playlist-page">
+        <a href="#" class="previous">&laquo; Previous</a>
+        <a href="#" class="next">Next &raquo;</a>
+        <div class="row">
+            <div class="col">
+                <img src="assets/images/spotify_example.jpg" alt="Spotify Example">
+            </div>
+        </div>
 </body>
+<!--JAVASCRIPT PSEDUO CODE!-->
+<!-- <script src="assets/javascript/script.js"></script> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+<script>
+//Global Variables
+//DISPLAY
+//ONCLICK BUTTON FUNC- HIDE and SHOW
+//pageOne button to p2
+//pageTwo button to p1 and p3
+//pageThree button to p2
+
+//server, key auth, make requests,mpn module api with methods,heroku,node.js
+
+//ERROR ALERTS AND USER VALIDATION
+//
+</script>
 
 </html>
