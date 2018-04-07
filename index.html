@@ -2,127 +2,83 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ListenHear</title>
-    <!-- Add Bootstrap !-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-    <!---CSS!-->
-    <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ListenHear</title>
+  <!-- Add Bootstrap !-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <!---CSS!-->
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <!--HTML WIREFRAME!-->
 
 <body>
-    <div class="jumbotron">
-        <h1>ListenHear</h1>
+  <div class="jumbotron">
+    <h1>ListenHear</h1>
+  </div>
+
+  <section class="displayHere">
+    <!--This is where the divs shows up on the webpage!-->
+  </section>
+
+  <hr>
+  <!--These are the separate pages !-->
+  <section class="container animated" id="landing-page">
+    <a href="#" class="previous">&laquo; Previous</a>
+    <a href="#" class="next">Next &raquo;</a>
+    <div class="row">
+      <div class="col">
+        <form>
+          <div class="form-group">
+            <label for="zip-input">Zip Code: </label>
+            <input type="text" class="form-control" id="zipcodeInput" aria-describedby="zipCodeInput" placeholder="Enter Your Zip Code">
+
+          </div>
+          <div class="form-group">
+            <label for="range-input">Range: </label>
+            <input type="text" class="form-control" id="distInput" placeholder="How Far Do You Want to Travel?">
+          </div>
+
+
+          <button class="btn btn-dark" id="submitBtn" type="submit">Submit</button>
+          <button class="btn btn-dark" id="spotifyBtn" type="submit">Spotify</button>
+        </form>
+      </div>
     </div>
-    <section class="displayHere">
-        <!--This is where the divs shows up on the webpage!-->
-    </section>
-    <hr>
-    <!--These are the separate pages !-->
-    <div class="container animated" id="landing-page">
-        <a href="#" class="previous">&laquo; Previous</a>
-        <a href="#" class="next">Next &raquo;</a>
-        <div class="row">
-            <div class="col">
-                <form>
-                    <div class="form-group">
-                        <label for="zip-input">Zip Code: </label>
-                        <input type="text" class="form-control" id="zipcodeInput" aria-describedby="zipCodeInput" placeholder="Enter Your Zip Code">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="range-input">Range: </label>
-                        <input type="text" class="form-control" id="distInput" placeholder="How Far Do You Want to Travel?">
-                    </div>
-
-
-                    <button class="btn btn-dark" id="submitBtn" type="submit">Submit</button>
-                    <button class="btn btn-dark" id="spotifyBtn" type="submit">Spotify</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <hr>
-
-    <div class="container animated" id="sort-page">
-        <a href="#" class="previous">&laquo; Previous</a>
-        <a href="#" class="next">Next &raquo;</a>
-        <!-- //Table
-        //Artist playing near you
-        //Genre groups
-        //Distance
-         -->
-        <div class="row">
-            <div class="col">
-                <table id="artistInTown">
-                    <thead id="tableHeader">
-                        <th>Artist Name</th>
-                        <th>Concert Date</th>
-                        <th>Location</th>
-                        <th>Genre</th>
-                    </thead>
-                    <tbody>
-                        <tr id="tableRow">
-                            <td>Weezer</td>
-                            <td>04/07/2018</td>
-                            <td>Raleigh</td>
-                            <td>Alternative</td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="container animated" id="selection-page">
-        <a href="#" class="previous">&laquo; Previous</a>
-        <a href="#" class="next">Next &raquo;</a>
-        <div class="row">
-            <!--//list of bands and venues 
+  </section>
+  <hr>
+  <section class="container animated" id="selection-page">
+    <a href="#" class="previous">&laquo; Previous</a>
+    <a href="#" class="next">Next &raquo;</a>
+    <div class="row">
+      <!--//list of bands and venues 
                 //check one/ all options -->
-            <div class="row">
-                <div class="col">
-                    <form action="">
-                        <input type="checkbox" class="userChoices"> Band1
-                        <br>
-                        <input type="checkbox" class="userChoices"> Band2
-                        <br>
-                        <input type="checkbox" class="userChoices"> Band2
-                    </form>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col">
+          <form action="">
+            <input type="checkbox" class="userChoices"> Band1
+            <br>
+            <input type="checkbox" class="userChoices"> Band2
+            <br>
+            <input type="checkbox" class="userChoices"> Band2
+          </form>
         </div>
-      <section id="modal" class="animated">
+      </div>
+  </section>
+
+  <section id="modal" class="animated">
     <!-- 
 modal goes here
  -->
   </section>
 
-  <section id="landing-page" class="animated">
-    <!-- 
-1 zip field     id="zip"
--input validation
-
-2 radius        id="radius"
-- https://getbootstrap.com/docs/4.0/components/dropdowns/
-
-3 launch button id="launch-button"
- -->
-  </section>
 
   <section id="sort-page" class="animated">
-    <!-- 
-  "sort page" goes here:
-  - groups to select from (e.g. genres)
-  - tap genre (or other group?) to get to "playlist selection"
-   -->
+
     <div class="container">
-      <!-- temporary... to pull in fake data -->
+
       <div class="row">
         <button id="get-data" type="button" class="btn btn-sm btn-info">get data</button>
       </div>
@@ -130,6 +86,7 @@ modal goes here
       <div class="row">
         <label for="sort-options">sort by...</label>
       </div>
+
       <div class="row">
         <div id="sort-options" class="btn-group" role="group" aria-label="sort by options">
           <button id="genre-filter" type="button" class="btn btn-lg btn-secondary">genre (country rn)</button>
@@ -138,20 +95,27 @@ modal goes here
         </div>
         <button type="button" class="btn  btn-lg btn-info">remove filters</button>
       </div>
+
       <div class="row">
         <div id="event-container" class="grid"></div>
       </div>
     </div>
-    <hr>
-    <div class="container animated" id="playlist-page">
-        <a href="#" class="previous">&laquo; Previous</a>
-        <a href="#" class="next">Next &raquo;</a>
-        <div class="row">
-            <div class="col">
-                <img src="assets/images/spotify_example.jpg" alt="Spotify Example">
-                <!--Cards for spotify playlists to manifest!-->
-            </div>
-        </div>
+  </section>
+  
+  <hr>
+
+  <section class="container animated" id="playlist-page">
+    <a href="#" class="previous">&laquo; Previous</a>
+    <a href="#" class="next">Next &raquo;</a>
+    <div class="row">
+      <div class="col">
+        <img src="assets/images/spotify_example.jpg" alt="Spotify Example">
+        <!--Cards for spotify playlists to manifest!-->
+      </div>
+    </div>
+  </section>
+
+
 </body>
 <!--JAVASCRIPT PSEDUO CODE!-->
 <!-- <script src="assets/javascript/script.js"></script> -->
@@ -174,18 +138,16 @@ modal goes here
 //
 </script>
 
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+  crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 
-  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-  <script src="assets/js/main.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 
 

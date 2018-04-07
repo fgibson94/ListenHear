@@ -1,3 +1,10 @@
+#modal,#sort-page,#selection-page,#playlist-page {
+    /* 
+    eventually we'll want these hidden when the page first loads
+    display:none 
+    */
+    }
+    
 .jumbotron{
     text-align: center;
 
@@ -5,6 +12,13 @@
 h1{
     font-size: 600%;
 }
+
+.event-wrapper{
+    display:inline-block;
+    background-color:rosybrown;
+    padding:20px;
+    margin:10px;
+  }
 
 .container{
     background-color: #E9ECEF;
