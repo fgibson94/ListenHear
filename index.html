@@ -15,13 +15,14 @@
 <!--HTML WIREFRAME!-->
 
 <body>
-  <div class="jumbotron">
+  <div id="jumbotron" class="jumbotron">
     <h1>ListenHear</h1>
   </div>
 
+  <!--This is where the divs shows up on the webpage!
   <section class="displayHere">
-    <!--This is where the divs shows up on the webpage!-->
   </section>
+-->
 
   <hr>
   <!--These are the separate pages !-->
@@ -33,17 +34,17 @@
         <form>
           <div class="form-group">
             <label for="zip-input">Zip Code: </label>
-            <input type="text" class="form-control" id="zipcodeInput" aria-describedby="zipCodeInput" placeholder="Enter Your Zip Code">
+            <input type="text" class="form-control" id="zip" aria-describedby="zipCodeInput" placeholder="Enter Your Zip Code">
 
           </div>
           <div class="form-group">
             <label for="range-input">Range: </label>
-            <input type="text" class="form-control" id="distInput" placeholder="How Far Do You Want to Travel?">
+            <input type="text" class="form-control" id="radius" placeholder="How Far Do You Want to Travel?">
           </div>
 
 
-          <button class="btn btn-dark" id="submitBtn" type="submit">Submit</button>
-          <button class="btn btn-dark" id="spotifyBtn" type="submit">Spotify</button>
+          <button class="btn btn-dark" id="launch-button">Submit</button>
+          <button class="btn btn-dark" id="spotifyBtn">Spotify</button>
         </form>
       </div>
     </div>
@@ -101,7 +102,7 @@ modal goes here
       </div>
     </div>
   </section>
-  
+
   <hr>
 
   <section class="container animated" id="playlist-page">
