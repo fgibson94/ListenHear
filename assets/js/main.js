@@ -94,9 +94,9 @@ function validateInput() {
 
 // API functions
 
+
 function callSpotify() {
-  //var accessToken = "BQDdHv7U5MBvA4HpuTMGmXsJ3Bxxti37fxxOQt2tO9mgpse5Uv7mTMQQ7JNEIsXnqaYtiG1p371lUXRI0_hzyGwTxpv66Y8LVZv_sNJfYfI1vMYE_nhaaVwvnHDnjVJ53usZMlmMJKyox_ednaN2YK2UdzIzVLRsqJH_pyYCzdnKs84"
-  let accessToken = "BQAKOWayUwGkwnHqv405j2ueNgMw8OL4-KJssHSpuQjnrW4CHkoVJUqv8CZy1SeooxqlOBS7zghslNXCvAb0ZUOWBOTBpwhV4zCmBSCb54BjysHFDs0Z-n456D_5CAn4mHqQwv2GW9Ae2dWlHMT5uFystj8v9GY"
+  let accessToken = "BQCMKLl-k2QkfWXwSEfB4ffhPF0SX49RlGbuswV5efZTLwZDFQM1CerqmlM7BXTygZNbckAVn4f0AcirgDm6neirqpTPRWHRonJ5fDkvqKn3pEjQZy1aUH1Psng8xi9ne9ZAyIXn8Wr2FPveoW_24YTYf66n4oy4fRLt3wYSQVbGo8VwCA"
   //optionally: use forEach?
   for (let i = 0; i < session.EVENT_ARR.length; i++) {
     $.ajax({
@@ -105,14 +105,39 @@ function callSpotify() {
         'Authorization': 'Bearer ' + accessToken
       },
       success: function (response) {
-        console.log(response);
+        console.log("spotify response ",response);
         let genres = response.artists.items["0"].genres;
         genres.forEach(genre =>{
           session.EVENT_ARR[i].genres.push(genre);  
         });
+        let spotifyId = response.artists.items["0"].id;
+        console.log(spotifyId)
+        session.EVENT_ARR[i].spotifyId = spotifyId
       }
     });
   };
+  setTimeout( function() {
+  for (let i = 0; i < session.EVENT_ARR.length; i++) {
+    console.log("session event id ", session.EVENT_ARR[i].spotifyId)
+    if (typeof session.EVENT_ARR[i].spotifyId !== "undefined") {
+    $.ajax({
+      url: "https://api.spotify.com/v1/artists/" + session.EVENT_ARR[i].spotifyId + "/top-tracks?country=US",
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      },
+      success: function (response) {
+        console.log("spotify two response ",response);
+        let spotifyTrackId = response.tracks[0].id;
+        console.log("trackID ",spotifyTrackId)
+        session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId
+      }
+    });
+    }
+    else {
+      console.log("get outta here")
+    }
+  };
+  }, 3000)
 }
 
 function callSeatGeek() {
@@ -126,6 +151,7 @@ function callSeatGeek() {
     url: queryURL,
     method: "GET"
   }).then(function (response) {
+    console.log("seat geek response ",response)
     //clear session on new search
     session.EVENT_ARR = [];
     //optionally: use forEach?
@@ -140,6 +166,8 @@ function callSeatGeek() {
         event.artist = artistName;
         event.venue = venueName;
         event.genres = [];
+        event.spotifyId = ""
+        event.spotifyTrackId =""
         session.EVENT_ARR.push(event);
         /* $("#artistsDiv").append(
           `
@@ -188,12 +216,14 @@ function loadEvents() {
   session.EVENT_ARR.forEach(event => {
     let randomNum = Math.round(Math.random() * colors.length);
     let color = colors[randomNum];
-
+    console.log(event.spotifyId)
     let index = session.EVENT_ARR.indexOf(event);
     var html =
-      `
+    `
       <div id="datum-name-${index}">${event.artist}</div>
       <div id="datum-venue-${index}">${event.venue}</div>
+      <iframe src="https://open.spotify.com/embed/track/${event.spotifyTrackId}"
+              width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
     `;
     let eventTile = $("<div>")
       .attr('id', 'event-wrapper' + index)
