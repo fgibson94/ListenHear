@@ -134,6 +134,7 @@ function checkId(response, index) {
 
 function callSpotify() {
   let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
+
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -223,6 +224,9 @@ function callSeatGeek() {
       dttm = moment(dttm).format("YYYY-MM-DD")
       if (dttm == DATE) {
         //build event array of artists/venues
+        
+        //TOMMY TODO: prob don't need these vars
+        ///try directly assigning response vals to props
         let artistName = response.events[i].performers[0].name
         let venueName = response.events[i].venue.name
         let venueAddress = response.events[i].venue.address
