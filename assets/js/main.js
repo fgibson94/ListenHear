@@ -95,7 +95,7 @@ function validateInput() {
 // API functions
 
 function checkGenre(response, index) {
-  
+
   let k = '';
   'genres' in response.artists.items["0"] ? k = "yup" : k = "nope";
   if (k == "nope") {
@@ -114,7 +114,7 @@ function checkGenre(response, index) {
   }
 }
 
-function purgeResponse(index){
+function purgeResponse(index) {
   session.EVENT_ARR.splice(index, 1);
 }
 
@@ -122,7 +122,7 @@ function checkId(response, index) {
   let k = '';
   'id' in response.artists.items["0"] ? k = "yup" : k = "nope";
   if (k == 'nope') {
-    purgeResponse(index,1)
+    purgeResponse(index, 1)
     //session.EVENT_ARR.splice(index, 1);
   } else {
     let spotifyId = response.artists.items["0"].id;
@@ -136,7 +136,7 @@ function callSpotify() {
   //joe's token
   //let accessToken = "BQCMKLl-k2QkfWXwSEfB4ffhPF0SX49RlGbuswV5efZTLwZDFQM1CerqmlM7BXTygZNbckAVn4f0AcirgDm6neirqpTPRWHRonJ5fDkvqKn3pEjQZy1aUH1Psng8xi9ne9ZAyIXn8Wr2FPveoW_24YTYf66n4oy4fRLt3wYSQVbGo8VwCA"
   //tommy's temp token
-  let accessToken = "BQDHOvwxeE-ysWgC6JWo5UqZmwx24FbEZw56bSMnSYzDgXQO7FAxltRJwEDvK-ys4iOS4PayL8XQGPNCLJTGdXTWX0PZNvF80JHLuco32JfxEsbJ-5VAHXJI49la75wE5lLAWlmXTKLxQog4b7BFDLGJjtzcyyc"
+  let accessToken = "BQD6OATj5SIeCP8MQHuEI56EpuYa1LYQb-zteUF9K6qMkBxi1emesQTc6uDOKI-bH314EoiATTnShqQGUm61fXD8r-WVaXUlVKoBLvllPthpEoSAdC-RisHAXNY0ifvfj5kNvcRxwWRCXYY5KPAwGYdopFppy_Y"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -150,19 +150,19 @@ function callSpotify() {
         let i = session.EVENT_ARR.indexOf(event);
 
         //if any of these are true, the response is junk
-        if (!('artists' in response)) { 
+        if (!('artists' in response)) {
           purgeResponse(i);
-          return; 
+          return;
         }
         if (!('items' in response.artists)) {
           purgeResponse(i);
           return;
         }
-        if ( response.artists.items.length <1 ) {
+        if (response.artists.items.length < 1) {
           purgeResponse(i);
           return;
         }
-      
+
         checkId(response, i);
         checkGenre(response, i);
       }
@@ -170,27 +170,41 @@ function callSpotify() {
   });
 
   setTimeout(function () {
-      for (let i = 0; i < session.EVENT_ARR.length; i++) {
-        //console.log("session event id ", session.EVENT_ARR[i].spotifyId)
-        if (typeof session.EVENT_ARR[i].spotifyId !== "undefined") {
-          $.ajax({
-            url: "https://api.spotify.com/v1/artists/" + session.EVENT_ARR[i].spotifyId + "/top-tracks?country=US",
-            headers: {
-              'Authorization': 'Bearer ' + accessToken
-            },
-            success: function (response) {
-              console.log("spotify two response ", response);
-              let spotifyTrackId = response.tracks[0].id;
-              console.log("trackID ", spotifyTrackId)
-              session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId
-            }
-          });
+    session.EVENT_ARR.forEach(event => {
+      //console.log("session event id ", session.EVENT_ARR[i].spotifyId)
+      $.ajax({
+        url: "https://api.spotify.com/v1/artists/" + event.spotifyId + "/top-tracks?country=US",
+        headers: {
+          'Authorization': 'Bearer ' + accessToken
+        },
+        success: function (response) {
+
+          let i = session.EVENT_ARR.indexOf(event);
+
+          console.log("from settimeout, response.tracks[0].id: ", response.tracks[0].id);
+
+          if (!('tracks' in response)) {
+            console.log("no tracks node");
+            purgeResponse(i);
+            return;
+          }
+          if (!('id' in response.tracks[0])) {
+            console.log("no id node");
+            purgeResponse(i);
+            return;
+          }
+          if (response.tracks.id == "") {
+            console.log("null id");
+            purgeResponse(i);
+            return;
+          }
+
+          let spotifyTrackId = response.tracks[0].id;
+          session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId;
         }
-        else {
-          console.log("get outta here")
-        }
-      };
-    }, 3000)
+      });
+    })
+  }, 3000)
 }
 
 function callSeatGeek() {
