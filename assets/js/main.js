@@ -96,7 +96,7 @@ function validateInput() {
 
 
 function callSpotify() {
-  let accessToken = "BQCMKLl-k2QkfWXwSEfB4ffhPF0SX49RlGbuswV5efZTLwZDFQM1CerqmlM7BXTygZNbckAVn4f0AcirgDm6neirqpTPRWHRonJ5fDkvqKn3pEjQZy1aUH1Psng8xi9ne9ZAyIXn8Wr2FPveoW_24YTYf66n4oy4fRLt3wYSQVbGo8VwCA"
+  let accessToken = "BQAPmDn2I56TCAAoqQZxyRB72xUMkQJIcxaeWl83_rnhqq2YsQJqrlqhBfetqQepOHy6eV_TZZN5jGYfaY_V8KSPQQq6glwnmWIwT9iG_ZzWj_6c9g1oAX4YgmxX6mShZgLoZZqUyelfEPtpFvevrExjpJRlio2xESnFABWV5MxJxVEKrw"
   //optionally: use forEach?
   for (let i = 0; i < session.EVENT_ARR.length; i++) {
     $.ajax({
@@ -162,9 +162,15 @@ function callSeatGeek() {
         //build event array of artists/venues
         let artistName = response.events[i].performers[0].name
         let venueName = response.events[i].venue.name
+        let venueAddress = response.events[i].venue.address
+        let venueCity = response.events[i].venue.city
+        let ticketLink = response.events[i].url
         let event = {};
         event.artist = artistName;
         event.venue = venueName;
+        event.address = venueAddress;
+        event.city = venueCity;
+        event.tickets = ticketLink;
         event.genres = [];
         event.spotifyId = ""
         event.spotifyTrackId =""
@@ -216,14 +222,17 @@ function loadEvents() {
   session.EVENT_ARR.forEach(event => {
     let randomNum = Math.round(Math.random() * colors.length);
     let color = colors[randomNum];
-    console.log(event.spotifyId)
     let index = session.EVENT_ARR.indexOf(event);
     var html =
     `
       <div id="datum-name-${index}">${event.artist}</div>
       <div id="datum-venue-${index}">${event.venue}</div>
-      <iframe src="https://open.spotify.com/embed/track/${event.spotifyTrackId}"
-              width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <div id="datum-city">${event.city}</div>
+      <iframe src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
+      width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <button class="btn btn-dark plansBtn">Make My Plans!</button>
+      <div id="datum-address" style="display: none;">${event.address}</div>
+      <div id="datum-ticket" style="display: none;">${event.tickets}</div>
     `;
     let eventTile = $("<div>")
       .attr('id', 'event-wrapper' + index)
@@ -239,6 +248,21 @@ function loadEvents() {
 $("#get-data").on('click', function () {
   loadEvents();
 });
+
+$(document).on("click", ".plansBtn", function() {
+  console.log("Plan Time")
+  let plansAddress = $("#datum-address").text()
+  let plansCity = $("#datum-city").text()
+  let plansTicketLink = $("#datum-ticket").text()
+  console.log(plansAddress, " ", plansCity, " ", plansTicketLink)
+  var queryURLYelp = "https://api.seatgeek.com/2/events?type=concert&per_page=1000&postal_code=" + ZIP + "&range=" + DIST + "mi&client_id=MTExMzAwNzR8MTUyMjk4NDcwNS4xNg"
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function (response) {
+    console.log("yelp ",response)
+  })
+})
 
 //DISPLAY
 
@@ -262,4 +286,5 @@ function bounceOut(section) {
 
 $(document).ready(function () {
   //load();
+
 })
