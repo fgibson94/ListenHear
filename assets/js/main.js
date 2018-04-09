@@ -228,9 +228,15 @@ function callSeatGeek() {
         //build event array of artists/venues
         let artistName = response.events[i].performers[0].name
         let venueName = response.events[i].venue.name
+        let venueAddress = response.events[i].venue.address
+        let venueCity = response.events[i].venue.city
+        let ticketLink = response.events[i].url
         let event = {
           artist: artistName,
           venue: venueName,
+          address: venueAddress,
+          city: venueCity,
+          tickets: ticketLink,
           genres: [],
           spotifyId: "",
           spotifyTrackId: "",
@@ -276,14 +282,17 @@ function loadEvents() {
   session.EVENT_ARR.forEach(event => {
     let randomNum = Math.round(Math.random() * colors.length);
     let color = colors[randomNum];
-    console.log(event.spotifyId)
     let index = session.EVENT_ARR.indexOf(event);
     var html =
       `
       <div id="datum-name-${index}">${event.artist}</div>
       <div id="datum-venue-${index}">${event.venue}</div>
-      <iframe src="https://open.spotify.com/embed/track/${event.spotifyTrackId}"
-              width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <div id="datum-city">${event.city}</div>
+      <iframe src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
+      width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <button class="btn btn-dark plansBtn">Make My Plans!</button>
+      <div id="datum-address" style="display: none;">${event.address}</div>
+      <div id="datum-ticket" style="display: none;">${event.tickets}</div>
     `;
     let eventTile = $("<div>")
       .attr('id', 'event-wrapper' + index)
@@ -299,6 +308,21 @@ function loadEvents() {
 $("#get-data").on('click', function () {
   loadEvents();
 });
+
+$(document).on("click", ".plansBtn", function() {
+  console.log("Plan Time")
+  let plansAddress = $("#datum-address").text()
+  let plansCity = $("#datum-city").text()
+  let plansTicketLink = $("#datum-ticket").text()
+  console.log(plansAddress, " ", plansCity, " ", plansTicketLink)
+  var queryURLYelp = "https://api.seatgeek.com/2/events?type=concert&per_page=1000&postal_code=" + ZIP + "&range=" + DIST + "mi&client_id=MTExMzAwNzR8MTUyMjk4NDcwNS4xNg"
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function (response) {
+    console.log("yelp ",response)
+  })
+})
 
 //DISPLAY
 
@@ -322,4 +346,5 @@ function bounceOut(section) {
 
 $(document).ready(function () {
   //load();
+
 })
