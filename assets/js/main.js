@@ -133,10 +133,8 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  //joe's token
-  //let accessToken = "BQCMKLl-k2QkfWXwSEfB4ffhPF0SX49RlGbuswV5efZTLwZDFQM1CerqmlM7BXTygZNbckAVn4f0AcirgDm6neirqpTPRWHRonJ5fDkvqKn3pEjQZy1aUH1Psng8xi9ne9ZAyIXn8Wr2FPveoW_24YTYf66n4oy4fRLt3wYSQVbGo8VwCA"
-  //tommy's temp token
-  let accessToken = "BQD6OATj5SIeCP8MQHuEI56EpuYa1LYQb-zteUF9K6qMkBxi1emesQTc6uDOKI-bH314EoiATTnShqQGUm61fXD8r-WVaXUlVKoBLvllPthpEoSAdC-RisHAXNY0ifvfj5kNvcRxwWRCXYY5KPAwGYdopFppy_Y"
+  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
+
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -226,16 +224,23 @@ function callSeatGeek() {
       dttm = moment(dttm).format("YYYY-MM-DD")
       if (dttm == DATE) {
         //build event array of artists/venues
+        
+        //TOMMY TODO: prob don't need these vars
+        ///try directly assigning response vals to props
         let artistName = response.events[i].performers[0].name
         let venueName = response.events[i].venue.name
         let venueAddress = response.events[i].venue.address
         let venueCity = response.events[i].venue.city
+        let venueLat = response.events[i].venue.location.lat
+        let venueLon = response.events[i].venue.location.lon
         let ticketLink = response.events[i].url
         let event = {
           artist: artistName,
           venue: venueName,
           address: venueAddress,
           city: venueCity,
+          lat: venueLat,
+          lon: venueLon,
           tickets: ticketLink,
           genres: [],
           spotifyId: "",
@@ -290,9 +295,11 @@ function loadEvents() {
       <div id="datum-city">${event.city}</div>
       <iframe src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
       width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-      <button class="btn btn-dark plansBtn">Make My Plans!</button>
+      <button class="btn btn-dark restBtn">Make My Plans!</button>
       <div id="datum-address" style="display: none;">${event.address}</div>
       <div id="datum-ticket" style="display: none;">${event.tickets}</div>
+      <div id="datum-lat" style="display: none;">${event.lat}</div>
+      <div id="datum-lon" style="display: none;">${event.lon}</div>
     `;
     let eventTile = $("<div>")
       .attr('id', 'event-wrapper' + index)
@@ -309,19 +316,89 @@ $("#get-data").on('click', function () {
   loadEvents();
 });
 
-$(document).on("click", ".plansBtn", function() {
+$(document).on("click", ".restBtn", function() {
+  $("#landing-page").hide()
+  $("#sort-page").hide()
+  $("#restaurants").show()
+  $("#testingFinalPage").hide()
   console.log("Plan Time")
   let plansAddress = $("#datum-address").text()
   let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat").text()
+  let plansLon = $("#datum-lon").text()
   let plansTicketLink = $("#datum-ticket").text()
-  console.log(plansAddress, " ", plansCity, " ", plansTicketLink)
-  var queryURLYelp = "https://api.seatgeek.com/2/events?type=concert&per_page=1000&postal_code=" + ZIP + "&range=" + DIST + "mi&client_id=MTExMzAwNzR8MTUyMjk4NDcwNS4xNg"
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ",plansLon, " ",plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc" 
   $.ajax({
-    url: queryURL,
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
     method: "GET"
   }).then(function (response) {
-    console.log("yelp ",response)
+    console.log("zomato ",response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+        let restName = response.restaurants[i].restaurant.name
+        let restAdd = response.restaurants[i].restaurant.location.address
+        let restLat = response.restaurants[i].restaurant.location.latitude
+        let restLon = response.restaurants[i].restaurant.location.longitude
+        let restType = response.restaurants[i].restaurant.cuisines
+        let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+        let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+        console.log(restName, " ", restAdd, " ",restType, " ",restCostForTwo, " ",restRating)
+        let restCost = Math.floor(restCostForTwo/2);
+        let restHtml =
+          `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+        let restEventTile = $("<div>")
+          .attr('id', 'event-wrapper')
+          .addClass('event-wrapper grid-item')
+          .css('background-color', "#ffdead")
+          .html(restHtml);
+
+        $("#restTable").append(restEventTile);
+    }
   })
+})
+
+$(document).on("click", ".finalPageBtn", function() {
+  $("#landing-page").hide()
+  $("#sort-page").hide()
+  $("#restaurants").hide()
+  $("#testingFinalPage").show()
+  let mapCity = $("#datum-plansCity").text()
+  let mapVenueAddress = $("#datum-venueAddress").text()
+  let mapRestAddress = $("#datum-restAddress").text()
+  let mapVenueLat = $("#datum-plansLat").text()
+  let mapVenueLon = $("#datum-plansLon").text()
+  let mapRestLat = $("#datum-restLat").text()
+  let mapRestLon = $("#datum-restLon").text()
+  let finalTicketLink = $("datum-ticket").text()
+  $("#map").append(
+    `
+    <img src="https://maps.googleapis.com/maps/api/staticmap?size=400x300&maptype=roadmap
+    &markers=color:blue%7Clabel:V%7C${mapVenueLat},${mapVenueLon}&markers=color:green%7Clabel:R%7C${mapRestLat},${mapRestLon}&key=AIzaSyAKk2jla3sb4BQY1kO1w3UgQOlut_1guwc" id="resultsMap" alt="Results Map">
+    <p><a href="https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}
+    ">Open Restaurant in Google Maps</a></p>
+    <p><a href="https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}
+    ">Open Venue in Google Maps</a></p>
+    `
+  )
+  $("#ticketlink").text(finalTicketLink)
 })
 
 //DISPLAY
@@ -345,6 +422,8 @@ function bounceOut(section) {
 }
 
 $(document).ready(function () {
-  //load();
-
+  $("#landing-page").show()
+  $("#sort-page").show()
+  $("#restaurants").hide()
+  $("#testingFinalPage").hide()
 })
