@@ -67,20 +67,20 @@ function validateInput() {
     return false;
   }
   for (let i = 0; i < zip.length; i++) {
-    if ( isNaN(zip.charAt(i)) ) {
+    if (isNaN(zip.charAt(i))) {
       zipError("invalid zip");
       console.log("zip err");
       return false;
     }
   }
   //handle radius
-  if (radius == ""){
+  if (radius == "") {
     radiusError("enter a number");
     return false;
   }
   for (let j = 0; j < radius.length; j++) {
     console.log(radius.charAt(j))
-    if ( isNaN(radius.charAt(j)) ) {
+    if (isNaN(radius.charAt(j))) {
       radiusError("enter a number");
       console.log("radius err");
       return false;
@@ -94,49 +94,116 @@ function validateInput() {
 
 // API functions
 
+function checkGenre(response, index) {
+
+  let k = '';
+  'genres' in response.artists.items["0"] ? k = "yup" : k = "nope";
+  if (k == "nope") {
+    return;
+  } else {
+    let genres = response.artists.items["0"].genres;
+    if (genres.length > 0) {
+      console.log("yup ", genres.length);
+      genres.forEach(genre => {
+        session.EVENT_ARR[index].genres.push(genre);
+      });
+    } else {
+      let genre = "unknown";
+      session.EVENT_ARR[index].genres.push(genre);
+    }
+  }
+}
+
+function purgeResponse(index) {
+  session.EVENT_ARR.splice(index, 1);
+}
+
+function checkId(response, index) {
+  let k = '';
+  'id' in response.artists.items["0"] ? k = "yup" : k = "nope";
+  if (k == 'nope') {
+    purgeResponse(index, 1)
+    //session.EVENT_ARR.splice(index, 1);
+  } else {
+    let spotifyId = response.artists.items["0"].id;
+    session.EVENT_ARR[index].spotifyId = spotifyId;
+  }
+
+}
+
 
 function callSpotify() {
-  let accessToken = "BQAPmDn2I56TCAAoqQZxyRB72xUMkQJIcxaeWl83_rnhqq2YsQJqrlqhBfetqQepOHy6eV_TZZN5jGYfaY_V8KSPQQq6glwnmWIwT9iG_ZzWj_6c9g1oAX4YgmxX6mShZgLoZZqUyelfEPtpFvevrExjpJRlio2xESnFABWV5MxJxVEKrw"
-  //optionally: use forEach?
-  for (let i = 0; i < session.EVENT_ARR.length; i++) {
+  //joe's token
+  //let accessToken = "BQCMKLl-k2QkfWXwSEfB4ffhPF0SX49RlGbuswV5efZTLwZDFQM1CerqmlM7BXTygZNbckAVn4f0AcirgDm6neirqpTPRWHRonJ5fDkvqKn3pEjQZy1aUH1Psng8xi9ne9ZAyIXn8Wr2FPveoW_24YTYf66n4oy4fRLt3wYSQVbGo8VwCA"
+  //tommy's temp token
+  let accessToken = "BQD6OATj5SIeCP8MQHuEI56EpuYa1LYQb-zteUF9K6qMkBxi1emesQTc6uDOKI-bH314EoiATTnShqQGUm61fXD8r-WVaXUlVKoBLvllPthpEoSAdC-RisHAXNY0ifvfj5kNvcRxwWRCXYY5KPAwGYdopFppy_Y"
+  session.EVENT_ARR.forEach(event => {
     $.ajax({
-      url: "https://api.spotify.com/v1/search?q=" + session.EVENT_ARR[i].artist + "&type=artist",
+      url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
       headers: {
         'Authorization': 'Bearer ' + accessToken
       },
       success: function (response) {
-        console.log("spotify response ",response);
-        let genres = response.artists.items["0"].genres;
-        genres.forEach(genre =>{
-          session.EVENT_ARR[i].genres.push(genre);  
-        });
-        let spotifyId = response.artists.items["0"].id;
-        console.log(spotifyId)
-        session.EVENT_ARR[i].spotifyId = spotifyId
+
+        //console.log(response);
+
+        let i = session.EVENT_ARR.indexOf(event);
+
+        //if any of these are true, the response is junk
+        if (!('artists' in response)) {
+          purgeResponse(i);
+          return;
+        }
+        if (!('items' in response.artists)) {
+          purgeResponse(i);
+          return;
+        }
+        if (response.artists.items.length < 1) {
+          purgeResponse(i);
+          return;
+        }
+
+        checkId(response, i);
+        checkGenre(response, i);
       }
-    });
-  };
-  setTimeout( function() {
-  for (let i = 0; i < session.EVENT_ARR.length; i++) {
-    console.log("session event id ", session.EVENT_ARR[i].spotifyId)
-    if (typeof session.EVENT_ARR[i].spotifyId !== "undefined") {
-    $.ajax({
-      url: "https://api.spotify.com/v1/artists/" + session.EVENT_ARR[i].spotifyId + "/top-tracks?country=US",
-      headers: {
-        'Authorization': 'Bearer ' + accessToken
-      },
-      success: function (response) {
-        console.log("spotify two response ",response);
-        let spotifyTrackId = response.tracks[0].id;
-        console.log("trackID ",spotifyTrackId)
-        session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId
-      }
-    });
-    }
-    else {
-      console.log("get outta here")
-    }
-  };
+    })
+  });
+
+  setTimeout(function () {
+    session.EVENT_ARR.forEach(event => {
+      //console.log("session event id ", session.EVENT_ARR[i].spotifyId)
+      $.ajax({
+        url: "https://api.spotify.com/v1/artists/" + event.spotifyId + "/top-tracks?country=US",
+        headers: {
+          'Authorization': 'Bearer ' + accessToken
+        },
+        success: function (response) {
+
+          let i = session.EVENT_ARR.indexOf(event);
+
+          console.log("from settimeout, response.tracks[0].id: ", response.tracks[0].id);
+
+          if (!('tracks' in response)) {
+            console.log("no tracks node");
+            purgeResponse(i);
+            return;
+          }
+          if (!('id' in response.tracks[0])) {
+            console.log("no id node");
+            purgeResponse(i);
+            return;
+          }
+          if (response.tracks.id == "") {
+            console.log("null id");
+            purgeResponse(i);
+            return;
+          }
+
+          let spotifyTrackId = response.tracks[0].id;
+          session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId;
+        }
+      });
+    })
   }, 3000)
 }
 
@@ -145,48 +212,41 @@ function callSeatGeek() {
   const ZIP = session.zip;
   const DIST = session.radius;
   const DATE = moment().format("YYYY-MM-DD");
-  console.log(DATE, " ", ZIP, " ", DIST);
   var queryURL = "https://api.seatgeek.com/2/events?type=concert&per_page=1000&postal_code=" + ZIP + "&range=" + DIST + "mi&client_id=MTExMzAwNzR8MTUyMjk4NDcwNS4xNg"
   $.ajax({
     url: queryURL,
     method: "GET"
   }).then(function (response) {
-    console.log("seat geek response ",response)
+    console.log("seat geek response ", response)
     //clear session on new search
     session.EVENT_ARR = [];
     //optionally: use forEach?
     for (var i = 0; i < response.events.length; i++) {
-      let timeChecker = response.events[i].datetime_local
-      let timeCheckerTwo = moment(timeChecker).format("YYYY-MM-DD")
-      if (timeCheckerTwo == DATE) {
+      let dttm = response.events[i].datetime_local
+      dttm = moment(dttm).format("YYYY-MM-DD")
+      if (dttm == DATE) {
         //build event array of artists/venues
         let artistName = response.events[i].performers[0].name
         let venueName = response.events[i].venue.name
         let venueAddress = response.events[i].venue.address
         let venueCity = response.events[i].venue.city
         let ticketLink = response.events[i].url
-        let event = {};
-        event.artist = artistName;
-        event.venue = venueName;
-        event.address = venueAddress;
-        event.city = venueCity;
-        event.tickets = ticketLink;
-        event.genres = [];
-        event.spotifyId = ""
-        event.spotifyTrackId =""
+        let event = {
+          artist: artistName,
+          venue: venueName,
+          address: venueAddress,
+          city: venueCity,
+          tickets: ticketLink,
+          genres: [],
+          spotifyId: "",
+          spotifyTrackId: "",
+        };
+        console.log("event ", event);
         session.EVENT_ARR.push(event);
-        /* $("#artistsDiv").append(
-          `
-          <div class="tile col resultCard">
-              <p class="tileTitle">${response.events[i].performers[0].name} | <i>${response.events[i].venue.name}</i></p>
-            </div>
-          </div>
-        </div>
-        `
-        )} */
       }
     }
-  callSpotify();
+    console.log(session.EVENT_ARR, " EVENT_ARR after callSeatGeek");
+    callSpotify();
   })
 }
 
@@ -224,7 +284,7 @@ function loadEvents() {
     let color = colors[randomNum];
     let index = session.EVENT_ARR.indexOf(event);
     var html =
-    `
+      `
       <div id="datum-name-${index}">${event.artist}</div>
       <div id="datum-venue-${index}">${event.venue}</div>
       <div id="datum-city">${event.city}</div>
