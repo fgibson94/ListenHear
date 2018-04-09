@@ -95,6 +95,7 @@ function validateInput() {
 // API functions
 
 function checkGenre(response, index) {
+  
   let k = '';
   'genres' in response.artists.items["0"] ? k = "yup" : k = "nope";
   if (k == "nope") {
@@ -113,11 +114,16 @@ function checkGenre(response, index) {
   }
 }
 
+function purgeResponse(index){
+  session.EVENT_ARR.splice(index, 1);
+}
+
 function checkId(response, index) {
   let k = '';
   'id' in response.artists.items["0"] ? k = "yup" : k = "nope";
   if (k == 'nope') {
-    session.EVENT_ARR.splice(index, 1);
+    purgeResponse(index,1)
+    //session.EVENT_ARR.splice(index, 1);
   } else {
     let spotifyId = response.artists.items["0"].id;
     session.EVENT_ARR[index].spotifyId = spotifyId;
@@ -125,11 +131,12 @@ function checkId(response, index) {
 
 }
 
+
 function callSpotify() {
   //joe's token
   //let accessToken = "BQCMKLl-k2QkfWXwSEfB4ffhPF0SX49RlGbuswV5efZTLwZDFQM1CerqmlM7BXTygZNbckAVn4f0AcirgDm6neirqpTPRWHRonJ5fDkvqKn3pEjQZy1aUH1Psng8xi9ne9ZAyIXn8Wr2FPveoW_24YTYf66n4oy4fRLt3wYSQVbGo8VwCA"
   //tommy's temp token
-  let accessToken = "BQAdjirrZKO9F_m5QzhM1hO0WgB9IxlrybD9BNvfQxDvr221Upob8-3jsX8juiWR1ltXNvYeKS21n6TWGI-YEB02SC-OAaYA1OvApC54IgUABIhExAY3NvGox1oDlBQQa46qYjCTlaSrxAnetHsX7Apza7eYTJU"
+  let accessToken = "BQDHOvwxeE-ysWgC6JWo5UqZmwx24FbEZw56bSMnSYzDgXQO7FAxltRJwEDvK-ys4iOS4PayL8XQGPNCLJTGdXTWX0PZNvF80JHLuco32JfxEsbJ-5VAHXJI49la75wE5lLAWlmXTKLxQog4b7BFDLGJjtzcyyc"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -137,13 +144,27 @@ function callSpotify() {
         'Authorization': 'Bearer ' + accessToken
       },
       success: function (response) {
-        console.log("genre ", response.artists.items["0"].genres);
-        console.log("id ", response.artists.items["0"].id);
+
+        //console.log(response);
 
         let i = session.EVENT_ARR.indexOf(event);
 
-        checkGenre(response, i);
+        //if any of these are true, the response is junk
+        if (!('artists' in response)) { 
+          purgeResponse(i);
+          return; 
+        }
+        if (!('items' in response.artists)) {
+          purgeResponse(i);
+          return;
+        }
+        if ( response.artists.items.length <1 ) {
+          purgeResponse(i);
+          return;
+        }
+      
         checkId(response, i);
+        checkGenre(response, i);
       }
     })
   });
