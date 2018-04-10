@@ -133,7 +133,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
+  let accessToken = "BQBxWsBu3TQekR7JE13lnAJMQLLDrf28HzKS3S5yBZO8z-uqzmzt-GYIm_QgiPkiXS259C_wYtA8IUjIrJCz_J86Km7k5LdmCIyPHRaZjJeiz3N4kY_ts9kaxQqrylQbJjrUIQPuSzDtmIir0nu2n4G2qpSAloyv8qbj9dUeEwb7GkHIAg"
 
   session.EVENT_ARR.forEach(event => {
     $.ajax({
@@ -312,7 +312,9 @@ function loadEvents() {
     let eventTile = $("<div>")
       .attr('id', 'event-wrapper-' + index)
       .addClass('event-wrapper grid-item')
-      .addClass(event.genres)
+      .addClass(event.genres[0])
+      .addClass(event.city)
+
       .css('background-color', color)
       .html(html);
 
