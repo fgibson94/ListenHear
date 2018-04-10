@@ -290,19 +290,27 @@ function loadEvents() {
     let index = session.EVENT_ARR.indexOf(event);
     var html =
       `
-      <div id="datum-name-${index}">${event.artist}</div>
-      <div id="datum-venue-${index}">${event.venue}</div>
-      <div id="datum-city">${event.city}</div>
-      <iframe src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
-      width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-      <button class="btn btn-dark restBtn">Make My Plans!</button>
+      <div class="container">
+        <div class="row tile">
+            <div class="text-center" id="datum-name-${index}">${event.artist}</div>
+        </div>
+        <div class="row tile">
+          <div class="text-center" id="datum-venue-${index}">@ ${event.venue}, ${event.city}</div>
+        </div>
+        <div class="row tile">
+          <iframe class="mx-auto" src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
+          width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
+        <div class="row tile">
+          <button class="btn btn-lg btn-block btn-dark restBtn mx-auto">Make My Plans!</button>
+        </div>
       <div id="datum-address" style="display: none;">${event.address}</div>
       <div id="datum-ticket" style="display: none;">${event.tickets}</div>
       <div id="datum-lat" style="display: none;">${event.lat}</div>
       <div id="datum-lon" style="display: none;">${event.lon}</div>
     `;
     let eventTile = $("<div>")
-      .attr('id', 'event-wrapper' + index)
+      .attr('id', 'event-wrapper-' + index)
       .addClass('event-wrapper grid-item')
       .addClass(event.genres)
       .css('background-color', color)

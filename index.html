@@ -10,50 +10,35 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   <!---CSS!-->
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,400,500" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <!--HTML WIREFRAME!-->
 
 <body>
-  <div id="jumbotron" class="jumbotron">
+  <div id="jumbotron" class="jumbotron jumbotron-fluid">
     <h1>ListenHear</h1>
   </div>
 
-  <!--This is where the divs shows up on the webpage!
-  <section class="displayHere">
-  </section>
--->
-
-  <hr>
   <!--These are the separate pages !-->
-  <section class="container animated" id="landing-page">
-    <a href="#" class="previous">&laquo; Previous</a>
-    <a href="#" class="next">Next &raquo;</a>
-    <div class="row">
-      <div class="col">
-        <form>
-          <div class="form-group">
-            <label for="zip-input">Zip Code: </label>
-            <input type="text" class="form-control" id="zip" aria-describedby="zipCodeInput" placeholder="Enter Your Zip Code">
-
-          </div>
-          <div class="form-group">
-            <label for="range-input">Range: </label>
-            <input type="text" class="form-control" id="radius" placeholder="How Far Do You Want to Travel?">
-          </div>
-
-
-          <button class="btn btn-dark" id="launch-button">Submit</button>
-          <button class="btn btn-dark" id="spotifyBtn">Spotify</button>
-        </form>
+  <section class="container container-fluid animated mx-auto width-mod" id="landing-page">
+    <form>
+      <div class="row">
+        <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
+          placeholder="zip code">
       </div>
-    </div>
-    
+      <div class="row">
+        <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)">
+      </div>
+      <div class="row">
+        <button class="btn btn-lg btn-block btn-dark col-12" id="launch-button">Submit</button>
+      </div>
+    </form>
   </section>
   <hr>
+
+  <!-- SEEMS LIKE WE'VE MOVED AWAY FROM THIS IDEA... INTEGRATED INTO "SORT-PAGE" DELETE THIS SECTION? -->
   <section class="container animated" id="selection-page">
-    <a href="#" class="previous">&laquo; Previous</a>
-    <a href="#" class="next">Next &raquo;</a>
     <div class="row">
       <!--//list of bands and venues 
                 //check one/ all options -->
@@ -77,52 +62,50 @@ modal goes here
   </section>
 
 
-  <section id="sort-page" class="animated">
+  <section id="sort-page" class="animated container container-fluid mx-auto width-mod">
 
-    <div class="container">
+    <!-- THIS BUTTON IS TEMPORARY... UNTIL WE IMPLEMENT THE PAGE/BY/PAGE WORKFLOW (HIDE/SHOW) -->
+    <div class="row">
+      <button id="get-data" type="button" class="btn btn-lg btn-block btn-dark">load tracks</button>
+    </div>
 
-      <div class="row">
-        <button id="get-data" type="button" class="btn btn-sm btn-info">get data</button>
+    <div class="row">
+      <div id="sort-options" class="btn-group mx-auto" role="group" aria-label="filter and sort options">
+        <button id="genre-filter" type="button" class="btn btn-lg btn-secondary">filter #1</button>
+        <button type="button" class="btn btn-lg btn-secondary">filter #2</button>
+        <button type="button" class="btn btn-lg btn-secondary">filter #3</button>
+        <button type="button" class="btn btn-lg btn-info">remove filters</button>
       </div>
+    </div>
 
-      <div class="row">
-        <label for="sort-options">sort by...</label>
-      </div>
-
-      <div class="row">
-        <div id="sort-options" class="btn-group" role="group" aria-label="sort by options">
-          <button id="genre-filter" type="button" class="btn btn-lg btn-secondary">genre (country rn)</button>
-          <button type="button" class="btn btn-lg  btn-secondary">alpha</button>
-          <button type="button" class="btn btn-lg  btn-secondary">distance</button>
-        </div>
-        <button type="button" class="btn  btn-lg btn-info">remove filters</button>
-      </div>
-
-      <div class="row">
-        <div id="event-container" class="grid"></div>
-      </div>
+    <div class="row">
+      <div id="event-container" class="grid"></div>
     </div>
   </section>
 
   <section id="restaurants">
     <h6>Joe Testing Restaurant Returns Section</h6>
-      <div id="restTable">
-        
-      </div>
+    <div id="restTable">
+
+    </div>
     </div>
   </section>
+
   <section id="testingFinalPage">
     <h6>Joe Testing Final Page Returns Section</h6>
-      <div id="map">
-        <p>Your Places on a Map!</p>
-      </div>
-      <div id="buy tickets">
-        <p>
-          Buy Tickets for the Show: <span id="ticketLink"></span>
-        </p>
-      </div>
+    <div id="map">
+      <p>Your Places on a Map!</p>
+    </div>
+    <div id="buy tickets">
+      <p>
+        Buy Tickets for the Show:
+        <span id="ticketLink"></span>
+      </p>
+    </div>
     </div>
   </section>
+  
+  <!-- SEEMS LIKE WE'VE MOVED AWAY FROM THIS IDEA... INTEGRATED INTO "SORT-PAGE" DELETE THIS SECTION? -->
   <section class="container animated" id="playlist-page">
     <a href="#" class="previous">&laquo; Previous</a>
     <a href="#" class="next">Next &raquo;</a>
