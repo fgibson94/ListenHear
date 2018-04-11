@@ -1,3 +1,14 @@
+var $grid = $('.grid').isotope({
+  // options
+  itemSelector: '.grid-item',
+  layoutMode: 'fitRows',
+  getSortData: {
+    rating: ".datum-restRating parseFloat",
+    price: ".datum-restCost parseInt"
+},
+});
+
+
 let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
 
 let session = {
@@ -247,7 +258,7 @@ function getButtons() {
   genresDeduplicated.forEach(genre => {
     let html =
       `
-      <a class="dropdown-item" href="#">${genre}</a>
+      <a class="dropdown-item" data-name=".${genre}" href="#">${genre}</a>
       `
     $('#genres-in-dropdown').append(html);
   });
@@ -256,7 +267,7 @@ function getButtons() {
   citiesDeduplicated.forEach(city => {
     let html =
       `
-    <a class="dropdown-item" href="#">${city}</a>
+    <a class="dropdown-item" data-name=".${city}" href="#">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
   });
@@ -291,10 +302,10 @@ function loadEvents() {
       `
       <div class="container">
         <div class="row tile">
-            <div class="text-center" id="datum-name-${index}">${event.artist}</div>
+            <div class="text-center" class="datum-name-${index}">${event.artist}</div>
         </div>
         <div class="row tile">
-          <div class="text-center" id="datum-venue-${index}">@ ${event.venue}, ${event.city}</div>
+          <div class="text-center" class="datum-venue-${index}">@ ${event.venue}, ${event.city}</div>
         </div>
         <div class="row tile">
           <iframe class="mx-auto" src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
@@ -303,10 +314,10 @@ function loadEvents() {
         <div class="row tile">
           <button class="btn btn-lg btn-block btn-dark restBtn mx-auto">Make My Plans!</button>
         </div>
-      <div id="datum-address" style="display: none;">${event.address}</div>
-      <div id="datum-ticket" style="display: none;">${event.tickets}</div>
-      <div id="datum-lat" style="display: none;">${event.lat}</div>
-      <div id="datum-lon" style="display: none;">${event.lon}</div>
+      <div class="datum-address" style="display: none;">${event.address}</div>
+      <div class="datum-ticket" style="display: none;">${event.tickets}</div>
+      <div class="datum-lat" style="display: none;">${event.lat}</div>
+      <div class="datum-lon" style="display: none;">${event.lon}</div>
     `;
 
     //replace spaces for class names
@@ -336,6 +347,22 @@ function loadEvents() {
 $("#get-data").on('click', function () {
   loadEvents();
 });
+
+$("#sort-options a").on("click", function () {
+
+  var value = $(this).attr('data-name');
+
+  $grid.isotope ({
+
+    filter: value,
+
+    
+  });
+
+})
+
+
+
 
 $(document).on("click", ".restBtn", function() {
   bounceIn('#restaurants');
@@ -372,19 +399,19 @@ $(document).on("click", ".restBtn", function() {
       let restCost = Math.floor(restCostForTwo / 2);
       let restHtml =
         `
-          <div id="datum-restName">Restaurant: ${restName}</div>
-          <div id="datum-restType">Cuisine: ${restType}</div>
-          <div id="datum-restCost">Avg Cost: ${restCost}</div>
-          <div id="datum-restRating">Rating: ${restRating}/5</div>
+          <div class="datum-restName">Restaurant: ${restName}</div>
+          <div class="datum-restType">Cuisine: ${restType}</div>
+          <div class="datum-restCost">Avg Cost: ${restCost}</div>
+          <div class="datum-restRating">Rating: ${restRating}/5</div>
           <button class="btn btn-dark finalPageBtn">Choose This One</button>
-          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
-          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
-          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
-          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
-          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
-          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
-          <div id="datum-restLat" style="display: none;">${restLat}</div>
-          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          <div class="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div class="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div class="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div class="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div class="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div class="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div class="datum-restLat" style="display: none;">${restLat}</div>
+          <div class="datum-restLon" style="display: none;">${restLon}</div>
           `;
       let restEventTile = $("<div>")
         .attr('id', 'event-wrapper')
@@ -393,9 +420,37 @@ $(document).on("click", ".restBtn", function() {
         .html(restHtml);
 
       $("#restTable").append(restEventTile);
+
     }
+      $grid.isotope ({
+
+      sortBy: "rating",
+      sortAscending: false
+
+      });
+
   })
 })
+
+$("#prices-button button").on("click", function () {
+
+  var sort = $(this).attr('data-name');
+
+  if(sort === "a")
+  $grid.isotope ({
+
+    sortBy: "price"
+  });
+
+  if(sort === "d")
+  $grid.isotope ({
+
+    sortBy: "price",
+    sortAscending: false
+  });
+})
+
+
 
 $(document).on("click", ".finalPageBtn", function() {
   $("#landingPage").hide()
