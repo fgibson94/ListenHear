@@ -94,7 +94,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  let accessToken = "BQBoMwnXX_rLkI5T4hb9jRhrUlAxjfVnCvy-GVDxkRFN1o_Zp3Qjg8y0HM3uXOXX4jfcRi0jt_nsCIMyydcSOnQQrTcDD3O6yr7N0a1oIFdkP8kL3fgzesY5g4XrYfBXDAH9WcViXFLeKg3V8OaifrFX04o7-CM"
+  let accessToken = "BQDvblWK7dzEU4zD0ltQ6awEWTQFlxH3KYrYL1oOUn1xacCEGOnkxwITxAYJULJI7-XLK7QbkxjQquazLjsxmbsrjksjoDD9qHvIDsR8W3tVEEYW8pUpEPGZ2QpNqjXTPvT0VCCF6rIom55VI5DLnvlpnzRGJZlau3b_Gfg5iBdA6_dYwg"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -127,7 +127,7 @@ function callSpotify() {
 
   setTimeout(function () {
     session.EVENT_ARR.forEach(event => {
-
+      console.log("spotify tracks being called")
       $.ajax({
         url: "https://api.spotify.com/v1/artists/" + event.spotifyId + "/top-tracks?country=US",
         headers: {
@@ -157,7 +157,7 @@ function callSpotify() {
           session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId;
         }
       });
-    })
+    loadEvents()})
   }, 3000)
 }
 
@@ -255,8 +255,12 @@ $("#launch-button").on("click", function () {
   let proceed = validateInput();
   if (proceed) {
     callSeatGeek();
-    //bounceOut("#landingPage")
-    //bounceIn('#sort-page');
+    bounceOut("#landingPage")
+    bounceIn("#loadingPage")
+    setTimeout( function(){
+      bounceOut("#loadingPage")
+      bounceIn('#sort-page');
+    }, 5000)
   }
 })
 
@@ -271,6 +275,9 @@ $('#sort-page').on('click', '#genre-filter', function () {
 });
 
 function loadEvents() {
+
+  setTimeout(function() {
+  console.log("event load started")
   $("#event-container").html("");
   session.EVENT_ARR.forEach(event => {
     let randomNum = Math.round(Math.random() * colors.length);
@@ -326,18 +333,12 @@ function loadEvents() {
   });
   //after events loaded, loop through events for genres
   getButtons();
+}, 2000)
 };
 
-$("#get-data").on('click', function () {
-  loadEvents();
-});
-
 $(document).on("click", ".restBtn", function() {
+  bounceOut("#sort-page")
   bounceIn('#restaurants');
-  $("#landingPage").hide()
-  $("#sort-page").hide()
-//  $("#restaurants").show()
-  $("#finalPage").hide()
   let plansAddress = $("#datum-address").text()
   let plansCity = $("#datum-city").text()
   let plansLat = $("#datum-lat").text()
@@ -392,10 +393,8 @@ $(document).on("click", ".restBtn", function() {
 })
 
 $(document).on("click", ".finalPageBtn", function() {
-  $("#landingPage").hide()
-  $("#sort-page").hide()
-  $("#restaurants").hide()
-  $("#finalPage").show()
+  bounceOut("#restaurants")
+  bounceIn('#finalPage');
   let mapCity = $("#datum-plansCity").text()
   let mapVenueAddress = $("#datum-venueAddress").text()
   let mapRestAddress = $("#datum-restAddress").text()
@@ -462,7 +461,8 @@ function bounceOut(section) {
 
 $(document).ready(function () {
   $("#landingPage").show()
-  $("#sort-page").show()
+  $("#loadingPage").hide()
+  $("#sort-page").hide()
   $("#restaurants").hide()
   $("#finalPage").hide()
 })

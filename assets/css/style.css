@@ -39,6 +39,12 @@ body{
     font-weight: 500;
   }
 
+#loadingImg {
+    height:50vh;
+    width:auto;
+    margin-top:25vh;
+}
+
 .tile > button {
     width:250px;
 }
