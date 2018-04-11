@@ -132,7 +132,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  // let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
+  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
 
   let accessToken = "BQDJrb-x42tyCVulgfrl83cyV2BDXIRcP0LKaq_uTxyYDi7alYlqcha6BukgWtgk59DNcWAEFB2qmFe9GxKmJdHrdB70602PPa-z3VnuGRmVGye4TSZwiXOHeuSYjZAOQqiuKotDAut7TWPGPG6V8Lnn5qlwijg"
   session.EVENT_ARR.forEach(event => {
