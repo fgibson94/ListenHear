@@ -133,7 +133,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  let accessToken = "BQBxWsBu3TQekR7JE13lnAJMQLLDrf28HzKS3S5yBZO8z-uqzmzt-GYIm_QgiPkiXS259C_wYtA8IUjIrJCz_J86Km7k5LdmCIyPHRaZjJeiz3N4kY_ts9kaxQqrylQbJjrUIQPuSzDtmIir0nu2n4G2qpSAloyv8qbj9dUeEwb7GkHIAg"
+  let accessToken = "BQA9N5smle9k87-e6vxDj1E3AMBJXbpOAN69s_covIIRYUIdhVRXZSXlfjr5mFcd3vrAqwJs_hQVcH1gpC4_2cDGDrOmgmLG311KlaIBEArsicc59Pr-SrL1zeslP0ZTWeql0IoDFyDSBA30RLLMsblVOgP2RpPkVtpHsQmct_NuQIITFg"
 
   session.EVENT_ARR.forEach(event => {
     $.ajax({
@@ -259,7 +259,7 @@ function callSeatGeek() {
 //WORKFLOW
 
 function load() {
-  bounceIn("#landing-page");
+  bounceIn("#landingPage");
   //get location/prompt for location?
 }
 
@@ -267,7 +267,7 @@ $("#launch-button").on("click", function () {
   let proceed = validateInput();
   if (proceed) {
     callSeatGeek();
-    //bounceOut("#landing-page")
+    //bounceOut("#landingPage")
     //bounceIn('#sort-page');
   }
 })
@@ -314,7 +314,6 @@ function loadEvents() {
       .addClass('event-wrapper grid-item')
       .addClass(event.genres[0])
       .addClass(event.city)
-
       .css('background-color', color)
       .html(html);
 
@@ -327,10 +326,10 @@ $("#get-data").on('click', function () {
 });
 
 $(document).on("click", ".restBtn", function() {
-  $("#landing-page").hide()
+  $("#landingPage").hide()
   $("#sort-page").hide()
   $("#restaurants").show()
-  $("#testingFinalPage").hide()
+  $("#finalPage").hide()
   console.log("Plan Time")
   let plansAddress = $("#datum-address").text()
   let plansCity = $("#datum-city").text()
@@ -386,10 +385,10 @@ $(document).on("click", ".restBtn", function() {
 })
 
 $(document).on("click", ".finalPageBtn", function() {
-  $("#landing-page").hide()
+  $("#landingPage").hide()
   $("#sort-page").hide()
   $("#restaurants").hide()
-  $("#testingFinalPage").show()
+  $("#finalPage").show()
   let mapCity = $("#datum-plansCity").text()
   let mapVenueAddress = $("#datum-venueAddress").text()
   let mapRestAddress = $("#datum-restAddress").text()
@@ -398,17 +397,29 @@ $(document).on("click", ".finalPageBtn", function() {
   let mapRestLat = $("#datum-restLat").text()
   let mapRestLon = $("#datum-restLon").text()
   let finalTicketLink = $("datum-ticket").text()
-  $("#map").append(
+  $("#googleMap").append(
     `
     <img src="https://maps.googleapis.com/maps/api/staticmap?size=400x300&maptype=roadmap
     &markers=color:blue%7Clabel:V%7C${mapVenueLat},${mapVenueLon}&markers=color:green%7Clabel:R%7C${mapRestLat},${mapRestLon}&key=AIzaSyAKk2jla3sb4BQY1kO1w3UgQOlut_1guwc" id="resultsMap" alt="Results Map">
-    <p><a href="https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}
-    ">Open Restaurant in Google Maps</a></p>
-    <p><a href="https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}
-    ">Open Venue in Google Maps</a></p>
     `
   )
-  $("#ticketlink").text(finalTicketLink)
+  $("#dinnerDirect").append(
+    `
+    <a href="https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}
+    ">Direction To Dinner</a>
+    `
+  )
+  $("#venueDirect").append(
+    `
+    <a href="https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}
+    ">Direction To Venue</a>
+    `
+  )
+  $("#ticketBuy").append(
+    `
+    <a href="${finalTicketLink}">Buy Tickets</a>
+    `
+  )
 })
 
 //DISPLAY
@@ -432,8 +443,8 @@ function bounceOut(section) {
 }
 
 $(document).ready(function () {
-  $("#landing-page").show()
+  $("#landingPage").show()
   $("#sort-page").show()
   $("#restaurants").hide()
-  $("#testingFinalPage").hide()
+  $("#finalPage").hide()
 })

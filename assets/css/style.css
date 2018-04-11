@@ -11,8 +11,30 @@
     padding:.5rem 2rem
 }
 
+#landingPage {
+    margin-top:15vh;
+}
+
+.formHeader {
+    text-align:center !important;
+}
+
 .row .tile{
     margin: 5px auto;
+}
+
+body{
+    font-family: 'Lato', sans-serif;
+    text-align:center;
+    width:100vw;
+    min-height:100vh;
+    max-height:100%;
+    background:linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+}
+
+.appTitle {
+    font-family: 'Carter One', cursive;
+    font-weight:bold;
 }
 
 h1{
@@ -38,6 +60,28 @@ h1{
 
 .container{
     color:black;
+}
+
+.endPage {
+    margin-top:10vh;
+
+}
+
+#finalPage {
+    height: 500px;
+    width: 70%;
+    margin: auto;
+    display: flex;
+}
+
+#googleMap img{
+    margin: auto;
+    width: 60%;
+}
+
+.linkTo {
+    font-size:16px;
+    width:15vw !important;
 }
 
 a {

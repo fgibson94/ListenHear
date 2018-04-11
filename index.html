@@ -11,31 +11,34 @@
     crossorigin="anonymous">
   <!---CSS!-->
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,400,500" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Carter+One|Lato" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <!--HTML WIREFRAME!-->
 
 <body>
-  <div id="jumbotron" class="jumbotron jumbotron-fluid">
-    <h1>ListenHear</h1>
-  </div>
-
   <!--These are the separate pages !-->
-  <section class="container container-fluid animated mx-auto width-mod" id="landing-page">
+  <section class="container container-fluid animated mx-auto width-mod" id="landingPage">
     <form>
+        <div>
+            <h1 class="appTitle">ListenHear</h1>
+        <br>
       <div class="row">
+        <h2 class="formHeader">Whats Your Zipcode?</h2>
         <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
           placeholder="zip code">
       </div>
+      <br>
       <div class="row">
+        <h2 class="formHeader">How Far Will You Travel?</h2>
         <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)">
       </div>
+      <br>
       <div class="row">
         <button class="btn btn-lg btn-block btn-dark col-12" id="launch-button">Submit</button>
       </div>
     </form>
   </section>
-  <hr>
 
   <!-- SEEMS LIKE WE'VE MOVED AWAY FROM THIS IDEA... INTEGRATED INTO "SORT-PAGE" DELETE THIS SECTION? -->
   <section class="container animated" id="selection-page">
@@ -84,26 +87,40 @@ modal goes here
   </section>
 
   <section id="restaurants">
-    <h6>Joe Testing Restaurant Returns Section</h6>
+    <h1 class="appTitle">Restaurants </h1>
+    <h2>Choose where you'd like to have dinner before the show!  All options within 1 mile of the venue.</h2>
     <div id="restTable">
 
     </div>
     </div>
   </section>
 
-  <section id="testingFinalPage">
-    <h6>Joe Testing Final Page Returns Section</h6>
-    <div id="map">
-      <p>Your Places on a Map!</p>
-    </div>
-    <div id="buy tickets">
-      <p>
-        Buy Tickets for the Show:
-        <span id="ticketLink"></span>
-      </p>
-    </div>
-    </div>
-  </section>
+  <section id="finalPage">
+      <div class="container endPage">
+          <h1 class="appTitle">Here's What You Need!</h1>
+          <div class="row">
+              <div class="col">
+                  <div id="googleMap">
+                  </div>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col">
+                  <button type="button" id="dinnerDirect" class="linkTo btn btn-lg">
+                  </button>
+              </div>
+              <div class="col">
+                  <button type="button" id="venueDirect" class="linkTo btn btn-lg">
+                  </button>
+              </div>
+              <div class="col">
+                  <button type="button" id="ticketBuy" class="linkTo btn btn-lg">
+                  </button>
+              </div>
+          </div>
+      </div>
+
   
   <!-- SEEMS LIKE WE'VE MOVED AWAY FROM THIS IDEA... INTEGRATED INTO "SORT-PAGE" DELETE THIS SECTION? -->
   <section class="container animated" id="playlist-page">
@@ -124,22 +141,6 @@ modal goes here
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-
-<script>
-//Global Variables
-//DISPLAY
-//ONCLICK BUTTON FUNC- HIDE and SHOW
-//pageOne button to p2
-//pageTwo button to p1 and p3
-//pageThree button to p2
-
-//server, key auth, make requests,mpn module api with methods,heroku,node.js
-
-
-//ERROR ALERTS AND USER VALIDATION
-//
-</script>
-
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -150,7 +151,6 @@ modal goes here
 
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 <script src="assets/js/main.js"></script>
-</body>
 
 
 </html>
