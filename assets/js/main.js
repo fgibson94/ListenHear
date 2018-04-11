@@ -1,36 +1,3 @@
-var fakeData = [
-  {
-    name: "Cowboy Dude",
-    genre: "country",
-    venue: "303 Country Venue Ln."
-  },
-  {
-    name: "Ranch Gal",
-    genre: "country",
-    venue: "303 Country Venue Ln."
-  },
-  {
-    name: "Deathmetal Dave",
-    genre: "metal",
-    venue: "14 Warehouse Rd."
-  },
-  {
-    name: "Dustin Beaver",
-    genre: "pop",
-    venue: "100 Main St."
-  },
-  {
-    name: "DJ Bingo",
-    genre: "trance",
-    venue: "14 Warehouse Rd."
-  },
-  {
-    name: "Frankie Lovejoy",
-    genre: "rock",
-    venue: "100 Main St."
-  }
-];
-
 let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
 
 let session = {
@@ -133,7 +100,7 @@ function checkId(response, index) {
 
 function callSpotify() {
 
-  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
+//  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
 
   let accessToken = "BQDJrb-x42tyCVulgfrl83cyV2BDXIRcP0LKaq_uTxyYDi7alYlqcha6BukgWtgk59DNcWAEFB2qmFe9GxKmJdHrdB70602PPa-z3VnuGRmVGye4TSZwiXOHeuSYjZAOQqiuKotDAut7TWPGPG6V8Lnn5qlwijg"
   session.EVENT_ARR.forEach(event => {
@@ -304,7 +271,6 @@ $("#launch-button").on("click", function () {
   }
 })
 
-
 function sortGenre() {
   $('.grid').isotope({
     filter: '.country'
@@ -372,10 +338,10 @@ $("#get-data").on('click', function () {
 });
 
 $(document).on("click", ".restBtn", function() {
+  bounceIn('#restaurants');
   $("#landingPage").hide()
-
   $("#sort-page").hide()
-  $("#restaurants").show()
+//  $("#restaurants").show()
   $("#finalPage").hide()
   console.log("Plan Time")
   let plansAddress = $("#datum-address").text()
