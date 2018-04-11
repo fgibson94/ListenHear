@@ -369,8 +369,8 @@ $(document).on("click", ".restBtn", function() {
         `
           <div id="datum-restName">Restaurant: ${restName}</div>
           <div id="datum-restType">Cuisine: ${restType}</div>
-          <div id="datum-restCost">Avg Cost: ${restCost}</div>
-          <div id="datum-restRating">Rating: ${restRating}/5</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
           <button class="btn btn-dark finalPageBtn">Choose This One</button>
           <div id="datum-restAddress" style="display:none;">${restAdd}</div>
           <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
