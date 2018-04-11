@@ -103,7 +103,6 @@ function checkGenre(response, index) {
   } else {
     let genres = response.artists.items["0"].genres;
     if (genres.length > 0) {
-      console.log("yup ", genres.length);
       genres.forEach(genre => {
         session.EVENT_ARR[index].genres.push(genre);
       });
@@ -133,8 +132,9 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  let accessToken = "BQBxWsBu3TQekR7JE13lnAJMQLLDrf28HzKS3S5yBZO8z-uqzmzt-GYIm_QgiPkiXS259C_wYtA8IUjIrJCz_J86Km7k5LdmCIyPHRaZjJeiz3N4kY_ts9kaxQqrylQbJjrUIQPuSzDtmIir0nu2n4G2qpSAloyv8qbj9dUeEwb7GkHIAg"
+  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
 
+  let accessToken = "BQDJrb-x42tyCVulgfrl83cyV2BDXIRcP0LKaq_uTxyYDi7alYlqcha6BukgWtgk59DNcWAEFB2qmFe9GxKmJdHrdB70602PPa-z3VnuGRmVGye4TSZwiXOHeuSYjZAOQqiuKotDAut7TWPGPG6V8Lnn5qlwijg"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -144,7 +144,6 @@ function callSpotify() {
       success: function (response) {
 
         //console.log(response);
-
         let i = session.EVENT_ARR.indexOf(event);
 
         //if any of these are true, the response is junk
@@ -224,7 +223,7 @@ function callSeatGeek() {
       dttm = moment(dttm).format("YYYY-MM-DD")
       if (dttm == DATE) {
         //build event array of artists/venues
-        
+
         //TOMMY TODO: prob don't need these vars
         ///try directly assigning response vals to props
         let artistName = response.events[i].performers[0].name
@@ -263,6 +262,38 @@ function load() {
   //get location/prompt for location?
 }
 
+//populate dropdown with buttons per genre
+function getButtons() {
+
+    //for genres and cities
+    //map session.EVENT_ARR to a new array
+    //filter by adding genres if index = first occurrence of value
+   const genresDeduplicated = session.EVENT_ARR
+    .map(value => value.genres[0])
+    .filter((value, index, arr) => arr.indexOf(value) === index);
+    const citiesDeduplicated = session.EVENT_ARR
+      .map(value => value.city)
+      .filter((value, index, arr) => arr.indexOf(value) === index);
+
+  //add button   for each element in de-duplicated array
+  genresDeduplicated.forEach(genre => {
+    let html =
+      `
+      <a class="dropdown-item" href="#">${genre}</a>
+      `
+    $('#genres-in-dropdown').append(html);
+  });
+
+  //repeat for cities
+  citiesDeduplicated.forEach(city => {
+    let html =
+      `
+    <a class="dropdown-item" href="#">${city}</a>
+    `
+    $('#cities-in-dropdown').append(html);
+  });
+}
+
 $("#launch-button").on("click", function () {
   let proceed = validateInput();
   if (proceed) {
@@ -271,6 +302,7 @@ $("#launch-button").on("click", function () {
     //bounceIn('#sort-page');
   }
 })
+
 
 function sortGenre() {
   $('.grid').isotope({
@@ -309,24 +341,36 @@ function loadEvents() {
       <div id="datum-lat" style="display: none;">${event.lat}</div>
       <div id="datum-lon" style="display: none;">${event.lon}</div>
     `;
+
+    //replace spaces for class names
+    let cityForClass = event.city;
+    for (let i = 0; i < cityForClass.length; i++) {
+      cityForClass = cityForClass.replace(" ", "-");
+    }
+    let genreForClass = event.genres[0];
+    for (let i = 0; i < genreForClass.length; i++) {
+      genreForClass = genreForClass.replace(" ", "-");
+    }
+
     let eventTile = $("<div>")
       .attr('id', 'event-wrapper-' + index)
       .addClass('event-wrapper grid-item')
-      .addClass(event.genres[0])
-      .addClass(event.city)
-
+      .addClass(genreForClass)
+      .addClass(cityForClass)
       .css('background-color', color)
       .html(html);
 
     $("#event-container").append(eventTile);
   });
+  //after events loaded, loop through events for genres
+  getButtons();
 };
 
 $("#get-data").on('click', function () {
   loadEvents();
 });
 
-$(document).on("click", ".restBtn", function() {
+$(document).on("click", ".restBtn", function () {
   $("#landing-page").hide()
   $("#sort-page").hide()
   $("#restaurants").show()
@@ -338,8 +382,8 @@ $(document).on("click", ".restBtn", function() {
   let plansLon = $("#datum-lon").text()
   let plansTicketLink = $("#datum-ticket").text()
   $("#ticketLink").text(plansTicketLink)
-  console.log(plansAddress, " ", plansCity, " ", plansLat, " ",plansLon, " ",plansTicketLink)
-  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc" 
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
   $.ajax({
     url: queryURLZomato,
     headers: {
@@ -347,19 +391,19 @@ $(document).on("click", ".restBtn", function() {
     },
     method: "GET"
   }).then(function (response) {
-    console.log("zomato ",response)
+    console.log("zomato ", response)
     for (var i = 0; i < response.restaurants.length; i++) {
-        let restName = response.restaurants[i].restaurant.name
-        let restAdd = response.restaurants[i].restaurant.location.address
-        let restLat = response.restaurants[i].restaurant.location.latitude
-        let restLon = response.restaurants[i].restaurant.location.longitude
-        let restType = response.restaurants[i].restaurant.cuisines
-        let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
-        let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
-        console.log(restName, " ", restAdd, " ",restType, " ",restCostForTwo, " ",restRating)
-        let restCost = Math.floor(restCostForTwo/2);
-        let restHtml =
-          `
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
           <div id="datum-restName">Restaurant: ${restName}</div>
           <div id="datum-restType">Cuisine: ${restType}</div>
           <div id="datum-restCost">Avg Cost: ${restCost}</div>
@@ -374,18 +418,18 @@ $(document).on("click", ".restBtn", function() {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-        let restEventTile = $("<div>")
-          .attr('id', 'event-wrapper')
-          .addClass('event-wrapper grid-item')
-          .css('background-color', "#ffdead")
-          .html(restHtml);
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
 
-        $("#restTable").append(restEventTile);
+      $("#restTable").append(restEventTile);
     }
   })
 })
 
-$(document).on("click", ".finalPageBtn", function() {
+$(document).on("click", ".finalPageBtn", function () {
   $("#landing-page").hide()
   $("#sort-page").hide()
   $("#restaurants").hide()
