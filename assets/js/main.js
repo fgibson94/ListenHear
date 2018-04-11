@@ -69,6 +69,10 @@ function checkGenre(response, index) {
     return;
   } else {
     let genres = response.artists.items["0"].genres;
+    //note: if you hit an error here...
+    ///might be because you don't have a spotify token
+    ///this is the first place code needs a real reference
+    ///to spotify data
     if (genres.length > 0) {
       genres.forEach(genre => {
         session.EVENT_ARR[index].genres.push(genre);
@@ -99,10 +103,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-
-//  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
-
-  let accessToken = "BQDJrb-x42tyCVulgfrl83cyV2BDXIRcP0LKaq_uTxyYDi7alYlqcha6BukgWtgk59DNcWAEFB2qmFe9GxKmJdHrdB70602PPa-z3VnuGRmVGye4TSZwiXOHeuSYjZAOQqiuKotDAut7TWPGPG6V8Lnn5qlwijg"
+  let accessToken = "BQApd_LTr5nEzOVCZtWoEp6QhnSWuMRx9Cp0x8YW5fxMM0pq4HaoKXnWhUYMAA0h_y-JaEkf215C7fF6utnMOJgcGJegqpa--_oMVGZ1WrUIOqZra5Coqlrcpd30RL0ULPNG1FZkUKLIMDC4_LmvAfXsYo8-MAQ"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -410,29 +411,40 @@ $(document).on("click", ".finalPageBtn", function() {
   let mapRestLat = $("#datum-restLat").text()
   let mapRestLon = $("#datum-restLon").text()
   let finalTicketLink = $("datum-ticket").text()
+  
+  $("#dinnerDirect").attr('href',`https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}`)
+  .text("Directions To Dinner");
+
+  $("#venueDirect").attr('href',`https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}`)
+  .text('Direction To Venue');
+
+  $("#ticketBuy").attr('src',`${finalTicketLink}`)
+  .text("Buy Tickets");
+
   $("#googleMap").append(
     `
     <img src="https://maps.googleapis.com/maps/api/staticmap?size=400x300&maptype=roadmap
     &markers=color:blue%7Clabel:V%7C${mapVenueLat},${mapVenueLon}&markers=color:green%7Clabel:R%7C${mapRestLat},${mapRestLon}&key=AIzaSyAKk2jla3sb4BQY1kO1w3UgQOlut_1guwc" id="resultsMap" alt="Results Map">
     `
   )
-  $("#dinnerDirect").append(
-    `
-    <a href="https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}
-    ">Direction To Dinner</a>
-    `
-  )
-  $("#venueDirect").append(
-    `
-    <a href="https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}
-    ">Direction To Venue</a>
-    `
-  )
-  $("#ticketBuy").append(
-    `
-    <a href="${finalTicketLink}">Buy Tickets</a>
-    `
-  )
+
+  // $("#dinnerDirect").append(
+  //   `
+  //   <a href="https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}
+  //   ">Direction To Dinner</a>
+  //   `
+  // )
+  // $("#venueDirect").append(
+  //   `
+  //   <a href="https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}
+  //   ">Direction To Venue</a>
+  //   `
+  // )
+  // $("#ticketBuy").append(
+  //   `
+  //   <a href="${finalTicketLink}">Buy Tickets</a>
+  //   `
+  // )
 })
 
 //DISPLAY
