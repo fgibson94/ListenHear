@@ -25,18 +25,14 @@ function radiusError(errorMessage) {
 function validateInput() {
   let zip = $("#zip").val().trim();
   let radius = $("#radius").val().trim();
-  console.log(zip);
-  console.log(radius);
   //handle zip
   if (zip.length != 5) {
     zipError("enter 5 digit zip");
-    console.log("zip length err");
     return false;
   }
   for (let i = 0; i < zip.length; i++) {
     if (isNaN(zip.charAt(i))) {
       zipError("invalid zip");
-      console.log("zip err");
       return false;
     }
   }
@@ -46,10 +42,8 @@ function validateInput() {
     return false;
   }
   for (let j = 0; j < radius.length; j++) {
-    console.log(radius.charAt(j))
     if (isNaN(radius.charAt(j))) {
       radiusError("enter a number");
-      console.log("radius err");
       return false;
     }
   }
@@ -69,10 +63,7 @@ function checkGenre(response, index) {
     return;
   } else {
     let genres = response.artists.items["0"].genres;
-    //note: if you hit an error here...
-    ///might be because you don't have a spotify token
-    ///this is the first place code needs a real reference
-    ///to spotify data
+
     if (genres.length > 0) {
       genres.forEach(genre => {
         session.EVENT_ARR[index].genres.push(genre);
@@ -103,7 +94,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  let accessToken = "BQApd_LTr5nEzOVCZtWoEp6QhnSWuMRx9Cp0x8YW5fxMM0pq4HaoKXnWhUYMAA0h_y-JaEkf215C7fF6utnMOJgcGJegqpa--_oMVGZ1WrUIOqZra5Coqlrcpd30RL0ULPNG1FZkUKLIMDC4_LmvAfXsYo8-MAQ"
+  let accessToken = "BQBoMwnXX_rLkI5T4hb9jRhrUlAxjfVnCvy-GVDxkRFN1o_Zp3Qjg8y0HM3uXOXX4jfcRi0jt_nsCIMyydcSOnQQrTcDD3O6yr7N0a1oIFdkP8kL3fgzesY5g4XrYfBXDAH9WcViXFLeKg3V8OaifrFX04o7-CM"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -112,7 +103,6 @@ function callSpotify() {
       },
       success: function (response) {
 
-        //console.log(response);
         let i = session.EVENT_ARR.indexOf(event);
 
         //if any of these are true, the response is junk
@@ -137,7 +127,7 @@ function callSpotify() {
 
   setTimeout(function () {
     session.EVENT_ARR.forEach(event => {
-      //console.log("session event id ", session.EVENT_ARR[i].spotifyId)
+
       $.ajax({
         url: "https://api.spotify.com/v1/artists/" + event.spotifyId + "/top-tracks?country=US",
         headers: {
@@ -146,8 +136,6 @@ function callSpotify() {
         success: function (response) {
 
           let i = session.EVENT_ARR.indexOf(event);
-
-          console.log("from settimeout, response.tracks[0].id: ", response.tracks[0].id);
 
           if (!('tracks' in response)) {
             console.log("no tracks node");
@@ -202,6 +190,7 @@ function callSeatGeek() {
         let venueLat = response.events[i].venue.location.lat
         let venueLon = response.events[i].venue.location.lon
         let ticketLink = response.events[i].url
+        console.log("ticketLink ",ticketLink);
         let event = {
           artist: artistName,
           venue: venueName,
@@ -214,7 +203,6 @@ function callSeatGeek() {
           spotifyId: "",
           spotifyTrackId: "",
         };
-        console.log("event ", event);
         session.EVENT_ARR.push(event);
       }
     }
@@ -315,6 +303,12 @@ function loadEvents() {
     for (let i = 0; i < cityForClass.length; i++) {
       cityForClass = cityForClass.replace(" ", "-");
     }
+
+    //note: if you hit an error here...
+    ///might be because you don't have a spotify token
+    ///this is the first place code needs a real reference
+    ///to spotify data
+
     let genreForClass = event.genres[0];
     for (let i = 0; i < genreForClass.length; i++) {
       genreForClass = genreForClass.replace(" ", "-");
@@ -344,7 +338,6 @@ $(document).on("click", ".restBtn", function() {
   $("#sort-page").hide()
 //  $("#restaurants").show()
   $("#finalPage").hide()
-  console.log("Plan Time")
   let plansAddress = $("#datum-address").text()
   let plansCity = $("#datum-city").text()
   let plansLat = $("#datum-lat").text()
@@ -410,7 +403,7 @@ $(document).on("click", ".finalPageBtn", function() {
   let mapVenueLon = $("#datum-plansLon").text()
   let mapRestLat = $("#datum-restLat").text()
   let mapRestLon = $("#datum-restLon").text()
-  let finalTicketLink = $("datum-ticket").text()
+  let finalTicketLink = $("#datum-ticket").text()
   
   $("#dinnerDirect").attr('href',`https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}`)
   .text("Directions To Dinner");
@@ -418,7 +411,7 @@ $(document).on("click", ".finalPageBtn", function() {
   $("#venueDirect").attr('href',`https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}`)
   .text('Direction To Venue');
 
-  $("#ticketBuy").attr('src',`${finalTicketLink}`)
+  $("#ticketBuy").attr('href',`${finalTicketLink}`)
   .text("Buy Tickets");
 
   $("#googleMap").append(
