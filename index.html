@@ -12,7 +12,7 @@
   <!---CSS!-->
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,400,500" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Carter+One|Lato" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <!--HTML WIREFRAME!-->
 
@@ -40,24 +40,6 @@
     </form>
   </section>
 
-  <!-- SEEMS LIKE WE'VE MOVED AWAY FROM THIS IDEA... INTEGRATED INTO "SORT-PAGE" DELETE THIS SECTION? -->
-  <section class="container animated" id="selection-page">
-    <div class="row">
-      <!--//list of bands and venues 
-                //check one/ all options -->
-      <div class="row">
-        <div class="col">
-          <form action="">
-            <input type="checkbox" class="userChoices"> Band1
-            <br>
-            <input type="checkbox" class="userChoices"> Band2
-            <br>
-            <input type="checkbox" class="userChoices"> Band2
-          </form>
-        </div>
-      </div>
-  </section>
-
   <section id="modal" class="animated">
     <!-- 
 modal goes here
@@ -73,13 +55,25 @@ modal goes here
     </div>
 
     <div class="row">
-      <div id="sort-options" class="btn-group mx-auto" role="group" aria-label="filter and sort options">
-        <button id="genre-filter" type="button" class="btn btn-lg btn-secondary">filter #1</button>
-        <button type="button" class="btn btn-lg btn-secondary">filter #2</button>
-        <button type="button" class="btn btn-lg btn-secondary">filter #3</button>
-        <button type="button" class="btn btn-lg btn-info">remove filters</button>
+      <div id="sort-options" class="mx-auto" role="group" aria-label="filter and sort options">
+        <button class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="genres-dropdown" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Genre
+        </button>
+        <div id="genres-in-dropdown" class="dropdown-menu" aria-labelledby="sort-options">
+          <a class="dropdown-item" href="#">All</a>
+        </div>
+        <button class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="cities-dropdown" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          City
+        </button>
+        <div id="cities-in-dropdown" class="dropdown-menu" aria-labelledby="sort-options">
+          <a class="dropdown-item" href="#">All</a>
+        </div>
       </div>
     </div>
+
+
 
     <div class="row">
       <div id="event-container" class="grid"></div>
@@ -121,18 +115,7 @@ modal goes here
           </div>
       </div>
 
-  
-  <!-- SEEMS LIKE WE'VE MOVED AWAY FROM THIS IDEA... INTEGRATED INTO "SORT-PAGE" DELETE THIS SECTION? -->
-  <section class="container animated" id="playlist-page">
-    <a href="#" class="previous">&laquo; Previous</a>
-    <a href="#" class="next">Next &raquo;</a>
-    <div class="row">
-      <div class="col">
-        <img src="assets/images/spotify_example.jpg" alt="Spotify Example">
-        <!--Cards for spotify playlists to manifest!-->
-      </div>
-    </div>
-  </section>
+ 
 
 
 </body>
