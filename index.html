@@ -20,32 +20,25 @@
   <!--These are the separate pages !-->
   <section class="container container-fluid animated mx-auto width-mod" id="landingPage">
     <form>
-        <div>
-            <h1 class="appTitle">ListenHear</h1>
+      <div>
+        <h1 class="appTitle">ListenHear</h1>
         <br>
-      <div class="row">
-        <h2 class="formHeader">Whats Your Zipcode?</h2>
-        <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
-          placeholder="zip code">
-      </div>
-      <br>
-      <div class="row">
-        <h2 class="formHeader">How Far Will You Travel?</h2>
-        <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)">
-      </div>
-      <br>
-      <div class="row">
-        <button class="btn btn-lg btn-block btn-dark col-12" id="launch-button">Submit</button>
-      </div>
+        <div class="row">
+          <h2 class="formHeader">Whats Your Zipcode?</h2>
+          <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
+            placeholder="zip code">
+        </div>
+        <br>
+        <div class="row">
+          <h2 class="formHeader">How Far Will You Travel?</h2>
+          <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)">
+        </div>
+        <br>
+        <div class="row">
+          <button class="btn btn-lg btn-block btn-dark col-12" id="launch-button">Submit</button>
+        </div>
     </form>
   </section>
-
-  <section id="modal" class="animated">
-    <!-- 
-modal goes here
- -->
-  </section>
-
 
   <section id="sort-page" class="animated container container-fluid mx-auto width-mod">
 
@@ -80,9 +73,9 @@ modal goes here
     </div>
   </section>
 
-  <section id="restaurants">
+  <section id="restaurants" class="animated">
     <h1 class="appTitle">Restaurants </h1>
-    <h2>Choose where you'd like to have dinner before the show!  All options within 1 mile of the venue.</h2>
+    <h2>Choose where you'd like to have dinner before the show! All options within 1 mile of the venue.</h2>
     <div id="restTable">
 
     </div>
@@ -90,32 +83,32 @@ modal goes here
   </section>
 
   <section id="finalPage">
-      <div class="container endPage">
-          <h1 class="appTitle">Here's What You Need!</h1>
-          <div class="row">
-              <div class="col">
-                  <div id="googleMap">
-                  </div>
-              </div>
+    <div class="container endPage">
+      <h1 class="appTitle">Here's What You Need!</h1>
+      <div class="row">
+        <div class="col">
+          <div id="googleMap">
           </div>
-          <br>
-          <div class="row">
-              <div class="col">
-                  <button type="button" id="dinnerDirect" class="linkTo btn btn-lg">
-                  </button>
-              </div>
-              <div class="col">
-                  <button type="button" id="venueDirect" class="linkTo btn btn-lg">
-                  </button>
-              </div>
-              <div class="col">
-                  <button type="button" id="ticketBuy" class="linkTo btn btn-lg">
-                  </button>
-              </div>
-          </div>
+        </div>
       </div>
+      <br>
+      <div class="row">
+        <div class="col">
+          <button type="button" id="dinnerDirect" class="linkTo btn btn-lg">
+          </button>
+        </div>
+        <div class="col">
+          <button type="button" id="venueDirect" class="linkTo btn btn-lg">
+          </button>
+        </div>
+        <div class="col">
+          <button type="button" id="ticketBuy" class="linkTo btn btn-lg">
+          </button>
+        </div>
+      </div>
+    </div>
 
- 
+
 
 
 </body>
