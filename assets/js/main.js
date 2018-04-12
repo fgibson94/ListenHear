@@ -94,7 +94,7 @@ function checkId(response, index) {
 
 
 function callSpotify() {
-  let accessToken = "BQDvblWK7dzEU4zD0ltQ6awEWTQFlxH3KYrYL1oOUn1xacCEGOnkxwITxAYJULJI7-XLK7QbkxjQquazLjsxmbsrjksjoDD9qHvIDsR8W3tVEEYW8pUpEPGZ2QpNqjXTPvT0VCCF6rIom55VI5DLnvlpnzRGJZlau3b_Gfg5iBdA6_dYwg"
+  let accessToken = "BQClDsXu8Gr_1R5AhXEX94XQ_cCWHE8c0cPI7vuwKfza-JPwbxT9WfIIVY2NPgUlgDWtUteg_puixnbbUX-zzzI7s1QkT1arGrrZhXxDueSYL3lcs-0BSDuc7cC2hYJn6TxqNg5hnexeJytBo1RppyrZB3ns4WI"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -157,8 +157,8 @@ function callSpotify() {
           session.EVENT_ARR[i].spotifyTrackId = spotifyTrackId;
         }
       });
-    loadEvents()})
-  }, 3000)
+    })
+    loadEvents() }, 3000)
 }
 
 function callSeatGeek() {
@@ -190,7 +190,6 @@ function callSeatGeek() {
         let venueLat = response.events[i].venue.location.lat
         let venueLon = response.events[i].venue.location.lon
         let ticketLink = response.events[i].url
-        console.log("ticketLink ",ticketLink);
         let event = {
           artist: artistName,
           venue: venueName,
@@ -236,7 +235,7 @@ function getButtons() {
   genresDeduplicated.forEach(genre => {
     let html =
       `
-      <a class="dropdown-item" href="#">${genre}</a>
+      <a class="dropdown-item">${genre}</a>
       `
     $('#genres-in-dropdown').append(html);
   });
@@ -245,7 +244,7 @@ function getButtons() {
   citiesDeduplicated.forEach(city => {
     let html =
       `
-    <a class="dropdown-item" href="#">${city}</a>
+    <a class="dropdown-item">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
   });
@@ -420,23 +419,6 @@ $(document).on("click", ".finalPageBtn", function() {
     `
   )
 
-  // $("#dinnerDirect").append(
-  //   `
-  //   <a href="https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}
-  //   ">Direction To Dinner</a>
-  //   `
-  // )
-  // $("#venueDirect").append(
-  //   `
-  //   <a href="https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}
-  //   ">Direction To Venue</a>
-  //   `
-  // )
-  // $("#ticketBuy").append(
-  //   `
-  //   <a href="${finalTicketLink}">Buy Tickets</a>
-  //   `
-  // )
 })
 
 //DISPLAY
