@@ -1,3 +1,6 @@
+
+
+
 let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
 
 let session = {
@@ -219,9 +222,11 @@ function getButtons() {
 
   //add button   for each element in de-duplicated array
   genresDeduplicated.forEach(genre => {
+    
+    var genreDash = genre.replace(" ", "-");
     let html =
       `
-      <a class="dropdown-item">${genre}</a>
+      <a class="dropdown-item" data-name=".${genreDash}">${genre}</a>
       `
     $('#genres-in-dropdown').append(html);
     $('#genres-in-dropdown-sm').append(html);
@@ -231,7 +236,7 @@ function getButtons() {
   citiesDeduplicated.forEach(city => {
     let html =
       `
-    <a class="dropdown-item">${city}</a>
+    <a class="dropdown-item" data-name=".${city}">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
     $('#cities-in-dropdown-sm').append(html);
@@ -255,15 +260,7 @@ $("#launch-button").on("click", function () {
   }
 })
 
-function sortGenre() {
-  $('.grid').isotope({
-    filter: '.country'
-  });
-};
 
-$('#sort-page').on('click', '#genre-filter', function () {
-  sortGenre();
-});
 
 function loadEvents() {
 
@@ -278,10 +275,10 @@ function loadEvents() {
         `
       <div class="container">
         <div class="row tile">
-            <div class="text-center" id="datum-name-${index}">${event.artist}</div>
+            <div class="text-center" class="datum-name-${index}">${event.artist}</div>
         </div>
         <div class="row tile">
-          <div class="text-center" id="datum-venue-${index}">@ ${event.venue}, ${event.city}</div>
+          <div class="text-center" class="datum-venue-${index}">@ ${event.venue}, ${event.city}</div>
         </div>
         <div class="row tile">
           <iframe class="mx-auto" src="https://play.spotify.com/embed/track/${event.spotifyTrackId}"
@@ -290,11 +287,12 @@ function loadEvents() {
         <div class="row tile">
           <button class="btn btn-lg btn-block btn-dark restBtn-${index} mx-auto">Make My Plans!</button>
         </div>
-      <div id="datum-address-${index}" style="display: none;">${event.address}</div>
-      <div id="datum-ticket-${index}" style="display: none;">${event.tickets}</div>
-      <div id="datum-lat-${index}" style="display: none;">${event.lat}</div>
-      <div id="datum-lon-${index}" style="display: none;">${event.lon}</div>
-    `;
+
+      <div id="datum-address-${index}" class="datum-address" style="display: none;">${event.address}</div>
+      <div id="datum-ticket-${index}" class="datum-ticket" style="display: none;">${event.tickets}</div>
+      <div id="datum-lat-${index}" class="datum-lat" style="display: none;">${event.lat}</div>
+      <div id="datum-lon-${index}" class="datum-lon" style="display: none;">${event.lon}</div>
+      `;
 
       //replace spaces for class names
       let cityForClass = event.city;
@@ -312,7 +310,41 @@ function loadEvents() {
         genreForClass = genreForClass.replace(" ", "-");
       }
 
-      let eventTile = $("<div>")
+  //CHECK THIS OUT AFTER MERGER    
+  $("#get-data").on('click', function () {
+
+  loadEvents();
+
+  var $grid = $('.grid').isotope({
+    // options
+    itemSelector: '.grid-item',
+    layoutMode: 'fitRows',
+    getSortData: {
+      rating: ".datum-restRating parseFloat",
+      price: ".datum-restCost parseInt"
+  },
+  });
+
+
+  $("#sort-options a").on("click", function () {
+
+    var value = $(this).attr('data-name');
+    console.log(value);
+    $grid.isotope ({
+  
+      filter: value,
+  
+      
+    });
+  
+  })
+
+});
+
+
+
+$(document).on("click", ".restBtn", function() {
+    let eventTile = $("<div>")
         .attr('id', 'event-wrapper-' + index)
         .addClass('event-wrapper grid-item')
         .addClass(genreForClass)
@@ -358,19 +390,19 @@ $(document).on("click", ".restBtn-0", function () {
       let restCost = Math.floor(restCostForTwo / 2);
       let restHtml =
         `
-          <div id="datum-restName">Restaurant: ${restName}</div>
-          <div id="datum-restType">Cuisine: ${restType}</div>
-          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
-          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <div id="datum-restName" class="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType" class="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="datum-restCost cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="datum-restRating rating">Rating: ${restRating}/5</div>
           <button class="btn btn-dark finalPageBtn">Choose This One</button>
-          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
-          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
-          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
-          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
-          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
-          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
-          <div id="datum-restLat" style="display: none;">${restLat}</div>
-          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          <div class="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div class="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div class="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div class="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div class="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div class="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div class="datum-restLat" style="display: none;">${restLat}</div>
+          <div class="datum-restLon" style="display: none;">${restLon}</div>
           `;
       let restEventTile = $("<div>")
         .attr('id', 'event-wrapper')
@@ -379,7 +411,44 @@ $(document).on("click", ".restBtn-0", function () {
         .html(restHtml);
 
       $("#restTable").append(restEventTile);
+
     }
+    var $grid = $('.grid').isotope({
+      // options
+      itemSelector: '.grid-item',
+      layoutMode: 'fitRows',
+      getSortData: {
+        rating: ".datum-restRating parseFloat",
+        price: ".datum-restCost parseInt"
+    },
+    });
+  
+
+      $grid.isotope ({
+
+      sortBy: "rating",
+      sortAscending: false
+
+      });
+
+      $("#prices-button a").on("click", function () {
+
+        var sort = $(this).attr('data-name');
+        console.log("test" +sort);
+        if(sort === "a")
+        $grid.isotope ({
+      
+          sortBy: "price"
+        });
+      
+        if(sort === "d")
+        $grid.isotope ({
+      
+          sortBy: "price",
+          sortAscending: false
+        });
+      })
+
   })
 })
 
@@ -1460,13 +1529,13 @@ $(document).on("click", ".finalPageBtn", function () {
   let finalTicketLink = $("#datum-ticket").text()
 
   $("#dinnerDirect").attr('href', `https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}`)
-    .text("Directions To Dinner");
+    .attr("target", "_blank").text("Directions To Dinner");
 
   $("#venueDirect").attr('href', `https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}`)
-    .text('Direction To Venue');
+    .attr("target", "_blank").text('Direction To Venue');
 
   $("#ticketBuy").attr('href', `${finalTicketLink}`)
-    .text("Buy Tickets");
+    .attr("target", "_blank").text("Buy Tickets");
 
   $("#googleMap").append(
     `
