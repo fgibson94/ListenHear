@@ -1,9 +1,9 @@
-.width-mod{
-    width: 91%;
+section{
+    margin-top:5vh;
 }
 
-#landingPage {
-    margin-top:5vh;
+.width-mod{
+    width: 91%;
 }
 
 .formHeader {
@@ -58,7 +58,6 @@ body{
 }
 
 #finalPage {
-    margin-top:5vh;
     width: 80%;
     margin: auto;
 }
