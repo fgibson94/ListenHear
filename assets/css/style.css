@@ -1,5 +1,5 @@
 /* these pages start out hidden */
-#landing-page,#loadingPage,#sort-page,#restaurants,#finalPage{
+#landingPage,#loadingPage,#sort-page,#restaurants,#finalPage{
     display:none;
 }
 
