@@ -1,26 +1,21 @@
-#modal,#selection-page,#playlist-page {
+/* these pages start out hidden */
+#landingPage,#loadingPage,#sort-page,#restaurants,#finalPage{
     display:none;
 }
 
+.appTitle {
+    font-family: 'Carter One', cursive;
+    text-shadow: 1px 1px 4px darkslategray;
+    font-weight:700;
+    font-size:5em;
+}
+
+section{
+    margin-top:5vh;
+}
+/* width-mod might be able to go under section */
 .width-mod{
-    width: 95%;
-}
-
-.jumbotron{
-    text-align: center;
-    padding:.5rem 2rem
-}
-
-#landingPage {
-    margin-top:15vh;
-}
-
-.formHeader {
-    text-align:center !important;
-}
-
-.row .tile{
-    margin: 5px auto;
+    width: 91%;
 }
 
 body{
@@ -32,79 +27,104 @@ body{
     background:linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
 }
 
-.appTitle {
-    font-family: 'Carter One', cursive;
-    font-weight:bold;
+.container{
+    color:black;
 }
 
-h1{
-    font-size: 3em;
+.btn-group{
+    margin: 5vh 0;
+}
+
+/* dropdown list border radius hack */
+.no-border-radius{
+    border-radius: 0rem;
+}
+.no-left-border-radius{
+    border-top-left-radius: 0rem;
+    border-bottom-left-radius: 0rem;
+}
+.no-right-border-radius{
+    border-top-right-radius: 0rem;
+    border-bottom-right-radius: 0rem;
+}
+
+.row .tile{
+    margin: 5px auto;
 }
 
 .event-wrapper{
     display:inline-block;
     background-color:rosybrown;
-    padding:10px;
+    padding:2px;
     margin:5px;
     font-family: 'Poppins';
     font-weight: 500;
   }
 
+#loadingImg {
+    height:50vh;
+    width:auto;
+    margin-top:25vh;
+}
+
+#sort-options-wrapper-sm{
+    display:none;
+}
+
+.sm-dropdown-width{
+    width:100%;
+    margin-top:4px;
+}
+
+.dropdown-wrap{
+    display:inline;
+}
 .tile > button {
     width:250px;
 }
 
-.col {
-    padding:0px;
-}
-
-.container{
-    color:black;
-}
-
-.endPage {
-    margin-top:10vh;
-
-}
-
 #finalPage {
-    height: 500px;
-    width: 70%;
+    width: 80%;
     margin: auto;
-    display: flex;
 }
 
 #googleMap img{
-    margin: auto;
-    width: 60%;
+    margin: 20px auto;
 }
 
-.linkTo {
-    font-size:16px;
-    width:15vw !important;
+/* might not actually need this... 
+    mighta been needed because there was a src/href mixup */
+.btn-group>.btn:not(:last-child):not(.dropdown-toggle){
+    color:white;
 }
 
-a {
-    text-decoration: none;
-    display: inline-block;
-    padding: 8px 16px;
+@media screen and (max-width: 500px) {
+
+    #sort-options-wrapper-lg{
+        display:none;
+    }
+
+    #sort-options-wrapper-sm{
+        display:block;
+    }
+
+    .appTitle{
+      font-size:4.5em;
+    }
+
+    h2{
+        font-size: 1.9rem;
+    }
 }
 
-a:hover {
-    background-color: #ddd;
-    color: black;
-}
+@media screen and (max-width: 400px) {
 
-.previous {
-    background-color: #f1f1f1;
-    color: black;
-}
+    .appTitle{
+      font-size:3.2em;
+    }
 
-.next {
-    background-color: #f1f1f1;
-    color: black;
-}
+    h2{
+        font-size:1.5rem;
+    }
 
-.round {
-    border-radius: 50%;
-}
+}    

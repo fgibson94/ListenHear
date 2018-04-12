@@ -22,16 +22,16 @@
     <form>
       <div>
         <h1 class="appTitle">ListenHear</h1>
-        <br>
         <div class="row">
           <h2 class="formHeader">Whats Your Zipcode?</h2>
           <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
-            placeholder="zip code">
+            placeholder="zip code" autocomplete="off">
         </div>
         <br>
         <div class="row">
           <h2 class="formHeader">How Far Will You Travel?</h2>
-          <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)">
+          <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)"
+            autocomplete="off">
         </div>
         <br>
         <div class="row">
@@ -40,32 +40,57 @@
     </form>
   </section>
 
+  <section id="loadingPage" class="animated">
+    <img id="loadingImg" src="assets/images/loadingImg.gif" alt="Loading">
+  </section>
+
   <section id="sort-page" class="animated container container-fluid mx-auto width-mod">
-
-    <!-- THIS BUTTON IS TEMPORARY... UNTIL WE IMPLEMENT THE PAGE/BY/PAGE WORKFLOW (HIDE/SHOW) -->
-    <div class="row">
-      <button id="get-data" type="button" class="btn btn-lg btn-block btn-dark">load tracks</button>
-    </div>
-
-    <div class="row">
-      <div id="sort-options" class="mx-auto" role="group" aria-label="filter and sort options">
-        <button class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="genres-dropdown" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          Genre
-        </button>
-        <div id="genres-in-dropdown" class="dropdown-menu" aria-labelledby="sort-options">
-          <a class="dropdown-item">All</a>
+    <div id="sort-options-wrapper-lg" class="row">
+      <div id="sort-options" class="btn-group mx-auto" role="group">
+        <button class="no-right-border-radius btn btn-lg btn-dark" id="sort-page-back" type="button">
+          <i class="chevron-left"></i> &lt; Back</button>
+        <div class="dropdown-wrap">
+          <button class="no-border-radius btn btn-lg btn-dark dropdown-toggle" type="button" id="genres-dropdown"
+            data-toggle="dropdown">
+            Genre
+          </button>
+          <div id="genres-in-dropdown" class="dropdown-menu">
+            <a class="dropdown-item">All</a>
+          </div>
         </div>
-        <button class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="cities-dropdown" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          City
-        </button>
-        <div id="cities-in-dropdown" class="dropdown-menu" aria-labelledby="sort-options">
-          <a class="dropdown-item">All</a>
+        <div class="dropdown-wrap">
+          <button class="no-left-border-radius btn btn-lg btn-dark dropdown-toggle" type="button" id="cities-dropdown"
+            data-toggle="dropdown">
+            City
+          </button>
+          <div id="cities-in-dropdown" class="dropdown-menu">
+            <a class="dropdown-item">All</a>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- response (small set of buttons) -->
+    <div id="sort-options-wrapper-sm" class="row">
+      <button class="btn btn-lg btn-block btn-dark" id="sort-page-back-sm" type="button">
+        <i class="chevron-left"></i> &lt; Back</button>
+      <div class="sm-dropdown-width">
+        <button class="btn btn-lg btn-block btn-dark dropdown-toggle" type="button" id="genres-dropdown-sm" data-toggle="dropdown">
+          Genre
+        </button>
+        <div id="genres-in-dropdown" class="dropdown-menu">
+          <a class="dropdown-item">All</a>
+        </div>
+      </div>
+      <div class="sm-dropdown-width">
+        <button class="btn btn-lg btn-block btn-dark dropdown-toggle" type="button" id="cities-dropdown-sm" data-toggle="dropdown">
+          City
+        </button>
+        <div id="cities-in-dropdown" class="dropdown-menu">
+          <a class="dropdown-item">All</a>
+        </div>
+      </div>
+    </div>
 
 
     <div class="row">
@@ -74,10 +99,11 @@
   </section>
 
   <section id="restaurants" class="animated">
-    <h1 class="appTitle">Restaurants </h1>
-    <h2>Choose where you'd like to have dinner before the show! All options within 1 mile of the venue.</h2>
-      
-    <div id="prices-button">
+    <h1 class="appTitle text-center">Restaurants </h1>
+    <h2>Choose where you'd like to have dinner before the show!
+      <br>All options within 1 mile of the venue.</h2>
+
+          <div id="prices-button">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="priceDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Prices
             </button>
@@ -86,39 +112,41 @@
               <a class="dropdown-item" data-name="d">High to Low</a>  
             </div>
 
-   
+    <!--
+    <button class="btn btn-lg btn-dark" type="button" id="restaurants-page-back">
+      <i class="chevron-left"></i> &lt; Back</button>
+    -->
+    
     <div id="restTable" class="grid">
 
     </div>
     </div>
   </section>
 
-  <section id="finalPage">
+  <section id="finalPage" class="animated">
+    <h1 class="appTitle text-center">Here's What You Need!</h1>
     <div class="container endPage">
-      <h1 class="appTitle">Here's What You Need!</h1>
       <div class="row">
-        <div class="col">
-          <div id="googleMap">
-          </div>
+        <div class="btn-group mx-auto">
+          
+          <!--
+          <button class="btn btn-lg btn-dark" type="button" id="last-page-back">
+            <i class="chevron-left"></i> &lt; Back</button>
+          -->
+          
+          <a role="button" id="ticketBuy" class="linkTo btn btn-lg btn-dark"></a>
+          <a role="button" id="venueDirect" class="linkTo btn btn-lg btn-dark"></a>
+          <a role="button" id="dinnerDirect" class="linkTo btn btn-lg btn-dark"></a>
         </div>
       </div>
-      <br>
-      <div class="row">
-        <div class="col">
-          <button type="button" id="dinnerDirect" class="linkTo btn btn-lg">
-          </button>
-        </div>
-        <div class="col">
-          <button type="button" id="venueDirect" class="linkTo btn btn-lg">
-          </button>
-        </div>
-        <div class="col">
-          <button type="button" id="ticketBuy" class="linkTo btn btn-lg">
-          </button>
+      <div class="row mx-auto">
+      </div>
+      <div class="row mx-auto">
+        <div id="googleMap" class="mx-auto">
         </div>
       </div>
     </div>
-
+  </section>
 
 
 
@@ -135,7 +163,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
   crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 <script src="assets/js/main.js"></script>
 
