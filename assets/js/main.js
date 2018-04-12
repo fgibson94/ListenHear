@@ -391,6 +391,21 @@ $(document).on("click", ".restBtn", function() {
   })
 })
 
+$(document.body).on('click','#sort-page-back', function(){
+  bounceOut('#sort-page');
+  bounceIn('#landingPage');
+});
+
+$(document.body).on('click','#restaurants-page-back', function(){
+  bounceOut('#restaurants');
+  bounceIn('#sort-page');
+});
+
+$(document.body).on('click','#last-page-back', function(){
+  bounceOut('#finalPage');
+  bounceIn('#restaurants');
+});
+
 $(document).on("click", ".finalPageBtn", function() {
   bounceOut("#restaurants")
   bounceIn('#finalPage');
@@ -442,9 +457,5 @@ function bounceOut(section) {
 }
 
 $(document).ready(function () {
-  $("#landingPage").show()
-  $("#loadingPage").hide()
-  $("#sort-page").hide()
-  $("#restaurants").hide()
-  $("#finalPage").hide()
+  bounceIn("#landingPage");
 })

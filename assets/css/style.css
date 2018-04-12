@@ -1,17 +1,21 @@
+/* these pages start out hidden */
+#landing-page,#loadingPage,#sort-page,#restaurants,#finalPage{
+    display:none;
+}
+
+.appTitle {
+    font-family: 'Carter One', cursive;
+    text-shadow: 1px 1px 4px darkslategray;
+    font-weight:700;
+    font-size:5em;
+}
+
 section{
     margin-top:5vh;
 }
-
+/* width-mod might be able to go under section */
 .width-mod{
     width: 91%;
-}
-
-.formHeader {
-    text-align:center !important;
-}
-
-.row .tile{
-    margin: 5px auto;
 }
 
 body{
@@ -23,11 +27,29 @@ body{
     background:linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
 }
 
-.appTitle {
-    font-family: 'Carter One', cursive;
-    text-shadow: 1px 1px 4px darkslategray;
-    font-weight:700;
-    font-size:5em;
+.container{
+    color:black;
+}
+
+.btn-group{
+    margin: 5vh 0;
+}
+
+/* dropdown list border radius hack */
+.no-border-radius{
+    border-radius: 0rem;
+}
+.no-left-border-radius{
+    border-top-left-radius: 0rem;
+    border-bottom-left-radius: 0rem;
+}
+.no-right-border-radius{
+    border-top-right-radius: 0rem;
+    border-bottom-right-radius: 0rem;
+}
+
+.row .tile{
+    margin: 5px auto;
 }
 
 .event-wrapper{
@@ -45,16 +67,11 @@ body{
     margin-top:25vh;
 }
 
-.tile > button {
-    width:250px;
-}
-
 .dropdown-wrap{
     display:inline;
 }
-
-.container{
-    color:black;
+.tile > button {
+    width:250px;
 }
 
 #finalPage {
@@ -64,12 +81,6 @@ body{
 
 #googleMap img{
     margin: 20px auto;
-}
-
-a {
-    text-decoration: none;
-    display: inline-block;
-    padding: 8px 16px;
 }
 
 /* might not actually need this... 
