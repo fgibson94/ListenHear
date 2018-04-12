@@ -1,12 +1,4 @@
-var $grid = $('.grid').isotope({
-  // options
-  itemSelector: '.grid-item',
-  layoutMode: 'fitRows',
-  getSortData: {
-    rating: ".datum-restRating parseFloat",
-    price: ".datum-restCost parseInt"
-},
-});
+
 
 
 let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
@@ -113,7 +105,7 @@ function callSpotify() {
 
 //  let accessToken = "BQDqOKtj-FgNt5wDs5GhbBZ2IedVBm8VeZoQhQu9FP-kUwKsb1Hzsz_DnmoGuEbqmh6js57jQpF3R3m_H5G1xgzqGGiFMaZQxze7eXoVZLE0b1MOsffM1ttTIvz_p2DSPyRN3nm7qVNQxiOCWs-fqhXldMLdMRRBm-AO-6mPiGjEsgWn4Q"
 
-  let accessToken = "BQDJrb-x42tyCVulgfrl83cyV2BDXIRcP0LKaq_uTxyYDi7alYlqcha6BukgWtgk59DNcWAEFB2qmFe9GxKmJdHrdB70602PPa-z3VnuGRmVGye4TSZwiXOHeuSYjZAOQqiuKotDAut7TWPGPG6V8Lnn5qlwijg"
+  let accessToken = "BQAMRu2cDwK1syBZcoqQbp0-ZoVfmWlkS7fIDG2eJD9_FBR3XZ_IPzW3G7ifSME85mGELue6yMSwC8oCgGnkSIJ4yGhwrQ6G41CMK3I8yyikVuRwe_1eweSb7GlDdXe8KkUWWGs"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -256,9 +248,11 @@ function getButtons() {
 
   //add button   for each element in de-duplicated array
   genresDeduplicated.forEach(genre => {
+    
+    var genreDash = genre.replace(" ", "-");
     let html =
       `
-      <a class="dropdown-item" data-name=".${genre}" href="#">${genre}</a>
+      <a class="dropdown-item" data-name=".${genreDash}">${genre}</a>
       `
     $('#genres-in-dropdown').append(html);
   });
@@ -267,7 +261,7 @@ function getButtons() {
   citiesDeduplicated.forEach(city => {
     let html =
       `
-    <a class="dropdown-item" data-name=".${city}" href="#">${city}</a>
+    <a class="dropdown-item" data-name=".${city}">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
   });
@@ -282,15 +276,7 @@ $("#launch-button").on("click", function () {
   }
 })
 
-function sortGenre() {
-  $('.grid').isotope({
-    filter: '.country'
-  });
-};
 
-$('#sort-page').on('click', '#genre-filter', function () {
-  sortGenre();
-});
 
 function loadEvents() {
   $("#event-container").html("");
@@ -346,21 +332,33 @@ function loadEvents() {
 
 $("#get-data").on('click', function () {
   loadEvents();
-});
 
-$("#sort-options a").on("click", function () {
 
-  var value = $(this).attr('data-name');
-
-  $grid.isotope ({
-
-    filter: value,
-
-    
+  var $grid = $('.grid').isotope({
+    // options
+    itemSelector: '.grid-item',
+    layoutMode: 'fitRows',
+    getSortData: {
+      rating: ".datum-restRating parseFloat",
+      price: ".datum-restCost parseInt"
+  },
   });
 
-})
 
+  $("#sort-options a").on("click", function () {
+
+    var value = $(this).attr('data-name');
+    console.log(value);
+    $grid.isotope ({
+  
+      filter: value,
+  
+      
+    });
+  
+  })
+
+});
 
 
 
@@ -422,6 +420,17 @@ $(document).on("click", ".restBtn", function() {
       $("#restTable").append(restEventTile);
 
     }
+    var $grid = $('.grid').isotope({
+      // options
+      itemSelector: '.grid-item',
+      layoutMode: 'fitRows',
+      getSortData: {
+        rating: ".datum-restRating parseFloat",
+        price: ".datum-restCost parseInt"
+    },
+    });
+  
+
       $grid.isotope ({
 
       sortBy: "rating",
@@ -429,26 +438,28 @@ $(document).on("click", ".restBtn", function() {
 
       });
 
+      $("#prices-button a").on("click", function () {
+
+        var sort = $(this).attr('data-name');
+        console.log("test" +sort);
+        if(sort === "a")
+        $grid.isotope ({
+      
+          sortBy: "price"
+        });
+      
+        if(sort === "d")
+        $grid.isotope ({
+      
+          sortBy: "price",
+          sortAscending: false
+        });
+      })
+
   })
 })
 
-$("#prices-button button").on("click", function () {
 
-  var sort = $(this).attr('data-name');
-
-  if(sort === "a")
-  $grid.isotope ({
-
-    sortBy: "price"
-  });
-
-  if(sort === "d")
-  $grid.isotope ({
-
-    sortBy: "price",
-    sortAscending: false
-  });
-})
 
 
 
@@ -489,6 +500,8 @@ $(document).on("click", ".finalPageBtn", function() {
     `
   )
 })
+
+
 
 //DISPLAY
 
