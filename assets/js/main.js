@@ -433,7 +433,14 @@ function bounceOut(section) {
   },600);
 }
 
-$(document.body).on('click', '.sort-page-back', function () {
+$(document.body).on('click', '#sort-page-back', function () {
+  bounceOut('#sort-page');
+  setTimeout(function () {
+    bounceIn('#landingPage');
+  }, 500);
+});
+
+$(document.body).on('click', '#sort-page-back-sm', function () {
   bounceOut('#sort-page');
   setTimeout(function () {
     bounceIn('#landingPage');
