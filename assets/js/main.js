@@ -224,6 +224,7 @@ function getButtons() {
       <a class="dropdown-item">${genre}</a>
       `
     $('#genres-in-dropdown').append(html);
+    $('#genres-in-dropdown-sm').append(html);
   });
 
   //repeat for cities
@@ -233,6 +234,7 @@ function getButtons() {
     <a class="dropdown-item">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
+    $('#cities-in-dropdown-sm').append(html);
   });
 }
 
