@@ -92,9 +92,8 @@ function checkId(response, index) {
 
 }
 
-
 function callSpotify() {
-  let accessToken = "BQClDsXu8Gr_1R5AhXEX94XQ_cCWHE8c0cPI7vuwKfza-JPwbxT9WfIIVY2NPgUlgDWtUteg_puixnbbUX-zzzI7s1QkT1arGrrZhXxDueSYL3lcs-0BSDuc7cC2hYJn6TxqNg5hnexeJytBo1RppyrZB3ns4WI"
+  let accessToken = "BQBdGvtygcqL93FvCii6F-pst2Fn_flvwTQw-gmxZKib706kVYViEDudjB5aM94rMvI77UGdzx8YYCTwUkLAYgcCyNjIy614qgzCFxvU_vAt8L6IhZJfUti6DanFZYUOC8ksHqP1fsCCm9BrFjPi15z-8D85Exo"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -158,7 +157,8 @@ function callSpotify() {
         }
       });
     })
-    loadEvents() }, 3000)
+    loadEvents()
+  }, 3000)
 }
 
 function callSeatGeek() {
@@ -171,7 +171,7 @@ function callSeatGeek() {
     url: queryURL,
     method: "GET"
   }).then(function (response) {
-    console.log("seat geek response ", response)
+
     //clear session on new search
     session.EVENT_ARR = [];
     //optionally: use forEach?
@@ -179,25 +179,16 @@ function callSeatGeek() {
       let dttm = response.events[i].datetime_local
       dttm = moment(dttm).format("YYYY-MM-DD")
       if (dttm == DATE) {
-        //build event array of artists/venues
 
-        //TOMMY TODO: prob don't need these vars
-        ///try directly assigning response vals to props
-        let artistName = response.events[i].performers[0].name
-        let venueName = response.events[i].venue.name
-        let venueAddress = response.events[i].venue.address
-        let venueCity = response.events[i].venue.city
-        let venueLat = response.events[i].venue.location.lat
-        let venueLon = response.events[i].venue.location.lon
-        let ticketLink = response.events[i].url
+        //build event array of artists/venues
         let event = {
-          artist: artistName,
-          venue: venueName,
-          address: venueAddress,
-          city: venueCity,
-          lat: venueLat,
-          lon: venueLon,
-          tickets: ticketLink,
+          artist: response.events[i].performers[0].name,
+          venue: response.events[i].venue.name,
+          address: response.events[i].venue.address,
+          city: response.events[i].venue.city,
+          lat: response.events[i].venue.location.lat,
+          lon: response.events[i].venue.location.lon,
+          tickets: response.events[i].url,
           genres: [],
           spotifyId: "",
           spotifyTrackId: "",
@@ -205,7 +196,7 @@ function callSeatGeek() {
         session.EVENT_ARR.push(event);
       }
     }
-    console.log(session.EVENT_ARR, " EVENT_ARR after callSeatGeek");
+
     callSpotify();
   })
 }
@@ -213,23 +204,18 @@ function callSeatGeek() {
 
 //WORKFLOW
 
-function load() {
-  bounceIn("#landingPage");
-  //get location/prompt for location?
-}
-
 //populate dropdown with buttons per genre
 function getButtons() {
 
-    //for genres and cities
-    //map session.EVENT_ARR to a new array
-    //filter by adding genres if index = first occurrence of value
-   const genresDeduplicated = session.EVENT_ARR
+  //for genres and cities
+  //map session.EVENT_ARR to a new array
+  //filter by adding genres if index = first occurrence of value
+  const genresDeduplicated = session.EVENT_ARR
     .map(value => value.genres[0])
     .filter((value, index, arr) => arr.indexOf(value) === index);
-    const citiesDeduplicated = session.EVENT_ARR
-      .map(value => value.city)
-      .filter((value, index, arr) => arr.indexOf(value) === index);
+  const citiesDeduplicated = session.EVENT_ARR
+    .map(value => value.city)
+    .filter((value, index, arr) => arr.indexOf(value) === index);
 
   //add button   for each element in de-duplicated array
   genresDeduplicated.forEach(genre => {
@@ -255,8 +241,12 @@ $("#launch-button").on("click", function () {
   if (proceed) {
     callSeatGeek();
     bounceOut("#landingPage")
-    bounceIn("#loadingPage")
-    setTimeout( function(){
+
+    setTimeout(function () {
+      bounceIn("#loadingPage")
+    }, 500);
+
+    setTimeout(function () {
       bounceOut("#loadingPage")
       bounceIn('#sort-page');
     }, 5000)
@@ -275,15 +265,15 @@ $('#sort-page').on('click', '#genre-filter', function () {
 
 function loadEvents() {
 
-  setTimeout(function() {
-  console.log("event load started")
-  $("#event-container").html("");
-  session.EVENT_ARR.forEach(event => {
-    let randomNum = Math.round(Math.random() * colors.length);
-    let color = colors[randomNum];
-    let index = session.EVENT_ARR.indexOf(event);
-    var html =
-      `
+  setTimeout(function () {
+    console.log("event load started")
+    $("#event-container").html("");
+    session.EVENT_ARR.forEach(event => {
+      let randomNum = Math.round(Math.random() * colors.length);
+      let color = colors[randomNum];
+      let index = session.EVENT_ARR.indexOf(event);
+      var html =
+        `
       <div class="container">
         <div class="row tile">
             <div class="text-center" id="datum-name-${index}">${event.artist}</div>
@@ -304,38 +294,38 @@ function loadEvents() {
       <div id="datum-lon" style="display: none;">${event.lon}</div>
     `;
 
-    //replace spaces for class names
-    let cityForClass = event.city;
-    for (let i = 0; i < cityForClass.length; i++) {
-      cityForClass = cityForClass.replace(" ", "-");
-    }
+      //replace spaces for class names
+      let cityForClass = event.city;
+      for (let i = 0; i < cityForClass.length; i++) {
+        cityForClass = cityForClass.replace(" ", "-");
+      }
 
-    //note: if you hit an error here...
-    ///might be because you don't have a spotify token
-    ///this is the first place code needs a real reference
-    ///to spotify data
+      //note: if you hit an error here...
+      ///might be because you don't have a spotify token
+      ///this is the first place code needs a real reference
+      ///to spotify data
 
-    let genreForClass = event.genres[0];
-    for (let i = 0; i < genreForClass.length; i++) {
-      genreForClass = genreForClass.replace(" ", "-");
-    }
+      let genreForClass = event.genres[0];
+      for (let i = 0; i < genreForClass.length; i++) {
+        genreForClass = genreForClass.replace(" ", "-");
+      }
 
-    let eventTile = $("<div>")
-      .attr('id', 'event-wrapper-' + index)
-      .addClass('event-wrapper grid-item')
-      .addClass(genreForClass)
-      .addClass(cityForClass)
-      .css('background-color', color)
-      .html(html);
+      let eventTile = $("<div>")
+        .attr('id', 'event-wrapper-' + index)
+        .addClass('event-wrapper grid-item')
+        .addClass(genreForClass)
+        .addClass(cityForClass)
+        .css('background-color', color)
+        .html(html);
 
-    $("#event-container").append(eventTile);
-  });
-  //after events loaded, loop through events for genres
-  getButtons();
-}, 2000)
+      $("#event-container").append(eventTile);
+    });
+    //after events loaded, loop through events for genres
+    getButtons();
+  }, 2000)
 };
 
-$(document).on("click", ".restBtn", function() {
+$(document).on("click", ".restBtn", function () {
   bounceOut("#sort-page")
   bounceIn('#restaurants');
   let plansAddress = $("#datum-address").text()
@@ -391,22 +381,7 @@ $(document).on("click", ".restBtn", function() {
   })
 })
 
-$(document.body).on('click','#sort-page-back', function(){
-  bounceOut('#sort-page');
-  bounceIn('#landingPage');
-});
-
-$(document.body).on('click','#restaurants-page-back', function(){
-  bounceOut('#restaurants');
-  bounceIn('#sort-page');
-});
-
-$(document.body).on('click','#last-page-back', function(){
-  bounceOut('#finalPage');
-  bounceIn('#restaurants');
-});
-
-$(document).on("click", ".finalPageBtn", function() {
+$(document).on("click", ".finalPageBtn", function () {
   bounceOut("#restaurants")
   bounceIn('#finalPage');
   let mapCity = $("#datum-plansCity").text()
@@ -417,15 +392,15 @@ $(document).on("click", ".finalPageBtn", function() {
   let mapRestLat = $("#datum-restLat").text()
   let mapRestLon = $("#datum-restLon").text()
   let finalTicketLink = $("#datum-ticket").text()
-  
-  $("#dinnerDirect").attr('href',`https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}`)
-  .text("Directions To Dinner");
 
-  $("#venueDirect").attr('href',`https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}`)
-  .text('Direction To Venue');
+  $("#dinnerDirect").attr('href', `https://www.google.com/maps/search/?api=1&query=${mapRestAddress}+${mapCity}`)
+    .text("Directions To Dinner");
 
-  $("#ticketBuy").attr('href',`${finalTicketLink}`)
-  .text("Buy Tickets");
+  $("#venueDirect").attr('href', `https://www.google.com/maps/search/?api=1&query=${mapVenueAddress}+${mapCity}`)
+    .text('Direction To Venue');
+
+  $("#ticketBuy").attr('href', `${finalTicketLink}`)
+    .text("Buy Tickets");
 
   $("#googleMap").append(
     `
@@ -453,8 +428,29 @@ function bounceOut(section) {
   setTimeout(function () {
     $(section).removeClass("bounceOutUp")
     $(section).css("display", "none");
-  });
+  },600);
 }
+
+$(document.body).on('click', '#sort-page-back', function () {
+  bounceOut('#sort-page');
+  setTimeout(function () {
+    bounceIn('#landingPage');
+  }, 500);
+});
+
+$(document.body).on('click', '#restaurants-page-back', function () {
+  bounceOut('#restaurants');
+  setTimeout(function () {
+    bounceIn('#sort-page');
+  }, 500);
+});
+
+$(document.body).on('click', '#last-page-back', function () {
+  bounceOut('#finalPage');
+  setTimeout(function () {
+    bounceIn('#restaurants');
+  }, 500);
+});
 
 $(document).ready(function () {
   bounceIn("#landingPage");

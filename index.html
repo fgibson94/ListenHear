@@ -25,12 +25,12 @@
         <div class="row">
           <h2 class="formHeader">Whats Your Zipcode?</h2>
           <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
-            placeholder="zip code">
+            placeholder="zip code" autocomplete="off">
         </div>
         <br>
         <div class="row">
           <h2 class="formHeader">How Far Will You Travel?</h2>
-          <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)">
+          <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)" autocomplete="off">
         </div>
         <br>
         <div class="row">
@@ -39,7 +39,7 @@
     </form>
   </section>
 
-  <section id="loadingPage">
+  <section id="loadingPage" class="animated">
     <img id="loadingImg" src="assets/images/loadingImg.gif" alt="Loading">
   </section>
 
