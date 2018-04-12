@@ -93,7 +93,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQBdGvtygcqL93FvCii6F-pst2Fn_flvwTQw-gmxZKib706kVYViEDudjB5aM94rMvI77UGdzx8YYCTwUkLAYgcCyNjIy614qgzCFxvU_vAt8L6IhZJfUti6DanFZYUOC8ksHqP1fsCCm9BrFjPi15z-8D85Exo"
+  let accessToken = "BQAbkeT4oXuUwfGKNkO8F1Nzqpbyyi2Mxs9sHTlQRVz9j3H1c46S8O5fXfYwrdDcYayl_7B4aZEi4jZF_3sGMezOydkuNbMna8rDhXJzkttaa_7YANglAzn3kGUHWlb6EK08yFBJeZ0gWDzT0M7p_ryqL73NYwvzsdh9OEeJ8b-Q6Hoq1w"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -251,7 +251,7 @@ $("#launch-button").on("click", function () {
     setTimeout(function () {
       bounceOut("#loadingPage")
       bounceIn('#sort-page');
-    }, 5000)
+    }, 6000)
   }
 })
 
@@ -288,12 +288,12 @@ function loadEvents() {
           width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
         <div class="row tile">
-          <button class="btn btn-lg btn-block btn-dark restBtn mx-auto">Make My Plans!</button>
+          <button class="btn btn-lg btn-block btn-dark restBtn-${index} mx-auto">Make My Plans!</button>
         </div>
-      <div id="datum-address" style="display: none;">${event.address}</div>
-      <div id="datum-ticket" style="display: none;">${event.tickets}</div>
-      <div id="datum-lat" style="display: none;">${event.lat}</div>
-      <div id="datum-lon" style="display: none;">${event.lon}</div>
+      <div id="datum-address-${index}" style="display: none;">${event.address}</div>
+      <div id="datum-ticket-${index}" style="display: none;">${event.tickets}</div>
+      <div id="datum-lat-${index}" style="display: none;">${event.lat}</div>
+      <div id="datum-lon-${index}" style="display: none;">${event.lon}</div>
     `;
 
       //replace spaces for class names
@@ -327,13 +327,13 @@ function loadEvents() {
   }, 2000)
 };
 
-$(document).on("click", ".restBtn", function () {
+$(document).on("click", ".restBtn-0", function () {
   bounceOut("#sort-page")
   bounceIn('#restaurants');
-  let plansAddress = $("#datum-address").text()
-  let plansCity = $("#datum-city").text()
-  let plansLat = $("#datum-lat").text()
-  let plansLon = $("#datum-lon").text()
+  let plansAddress = $("#datum-address-0").text()
+  let plansCity = $("#datum-city-0").text()
+  let plansLat = $("#datum-lat-0").text()
+  let plansLon = $("#datum-lon-0").text()
   let plansTicketLink = $("#datum-ticket").text()
   $("#ticketLink").text(plansTicketLink)
   console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
@@ -382,6 +382,1070 @@ $(document).on("click", ".restBtn", function () {
     }
   })
 })
+
+ $(document).on("click", ".restBtn-1", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-1").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-1").text()
+  let plansLon = $("#datum-lon-1").text()
+  let plansTicketLink = $("#datum-ticket-1").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+}) 
+
+ $(document).on("click", ".restBtn-2", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-2").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-2").text()
+  let plansLon = $("#datum-lon-2").text()
+  let plansTicketLink = $("#datum-ticket-2").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-3", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-3").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-3").text()
+  let plansLon = $("#datum-lon-3").text()
+  let plansTicketLink = $("#datum-ticket-3").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-4", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-4").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-4").text()
+  let plansLon = $("#datum-lon-4").text()
+  let plansTicketLink = $("#datum-ticket-4").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-5", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-5").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-5").text()
+  let plansLon = $("#datum-lon-5").text()
+  let plansTicketLink = $("#datum-ticket-5").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-6", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-6").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-6").text()
+  let plansLon = $("#datum-lon-6").text()
+  let plansTicketLink = $("#datum-ticket-6").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-7", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-7").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-7").text()
+  let plansLon = $("#datum-lon-7").text()
+  let plansTicketLink = $("#datum-ticket-7").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-8", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-8").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-8").text()
+  let plansLon = $("#datum-lon-8").text()
+  let plansTicketLink = $("#datum-ticket-8").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-9", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-9").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-9").text()
+  let plansLon = $("#datum-lon-9").text()
+  let plansTicketLink = $("#datum-ticket-9").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+}) 
+
+$(document).on("click", ".restBtn-10", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-10").text()
+  let plansCity = $("#datum-city-10").text()
+  let plansLat = $("#datum-lat-10").text()
+  let plansLon = $("#datum-lon-10").text()
+  let plansTicketLink = $("#datum-ticket").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+ $(document).on("click", ".restBtn-11", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-11").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-11").text()
+  let plansLon = $("#datum-lon-11").text()
+  let plansTicketLink = $("#datum-ticket-11").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+}) 
+
+ $(document).on("click", ".restBtn-12", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-12").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-12").text()
+  let plansLon = $("#datum-lon-12").text()
+  let plansTicketLink = $("#datum-ticket-12").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-13", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-13").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-13").text()
+  let plansLon = $("#datum-lon-13").text()
+  let plansTicketLink = $("#datum-ticket-13").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-14", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-14").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-14").text()
+  let plansLon = $("#datum-lon-14").text()
+  let plansTicketLink = $("#datum-ticket-14").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-15", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-15").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-15").text()
+  let plansLon = $("#datum-lon-15").text()
+  let plansTicketLink = $("#datum-ticket-15").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-16", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-16").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-16").text()
+  let plansLon = $("#datum-lon-16").text()
+  let plansTicketLink = $("#datum-ticket-16").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-17", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-17").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-17").text()
+  let plansLon = $("#datum-lon-17").text()
+  let plansTicketLink = $("#datum-ticket-17").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-18", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-18").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-18").text()
+  let plansLon = $("#datum-lon-18").text()
+  let plansTicketLink = $("#datum-ticket-18").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+})
+
+$(document).on("click", ".restBtn-19", function () {
+  bounceOut("#sort-page")
+  bounceIn('#restaurants');
+  let plansAddress = $("#datum-address-19").text()
+  let plansCity = $("#datum-city").text()
+  let plansLat = $("#datum-lat-19").text()
+  let plansLon = $("#datum-lon-19").text()
+  let plansTicketLink = $("#datum-ticket-19").text()
+  $("#ticketLink").text(plansTicketLink)
+  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
+  $.ajax({
+    url: queryURLZomato,
+    headers: {
+      'user-key': '8f2702571eb36dcdffc4d7d4d56e12dd'
+    },
+    method: "GET"
+  }).then(function (response) {
+    console.log("zomato ", response)
+    for (var i = 0; i < response.restaurants.length; i++) {
+      let restName = response.restaurants[i].restaurant.name
+      let restAdd = response.restaurants[i].restaurant.location.address
+      let restLat = response.restaurants[i].restaurant.location.latitude
+      let restLon = response.restaurants[i].restaurant.location.longitude
+      let restType = response.restaurants[i].restaurant.cuisines
+      let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
+      let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
+      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      let restCost = Math.floor(restCostForTwo / 2);
+      let restHtml =
+        `
+          <div id="datum-restName">Restaurant: ${restName}</div>
+          <div id="datum-restType">Cuisine: ${restType}</div>
+          <div id="datum-restCost" class="cost">Avg Cost: ${restCost}</div>
+          <div id="datum-restRating" class="rating">Rating: ${restRating}/5</div>
+          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <div id="datum-restAddress" style="display:none;">${restAdd}</div>
+          <div id="datum-venueAddress" style="display: none;">${plansAddress}</div>
+          <div id="datum-ticket" style="display: none;">${plansTicketLink}</div>
+          <div id="datum-plansCity" style="display: none;">${plansCity}</div>
+          <div id="datum-plansLat" style="display: none;">${plansLat}</div>
+          <div id="datum-plansLon" style="display: none;">${plansLon}</div>
+          <div id="datum-restLat" style="display: none;">${restLat}</div>
+          <div id="datum-restLon" style="display: none;">${restLon}</div>
+          `;
+      let restEventTile = $("<div>")
+        .attr('id', 'event-wrapper')
+        .addClass('event-wrapper grid-item')
+        .css('background-color', "#ffdead")
+        .html(restHtml);
+
+      $("#restTable").append(restEventTile);
+    }
+  })
+}) 
 
 $(document).on("click", ".finalPageBtn", function () {
   bounceOut("#restaurants")
