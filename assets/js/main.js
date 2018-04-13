@@ -96,7 +96,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQAbkeT4oXuUwfGKNkO8F1Nzqpbyyi2Mxs9sHTlQRVz9j3H1c46S8O5fXfYwrdDcYayl_7B4aZEi4jZF_3sGMezOydkuNbMna8rDhXJzkttaa_7YANglAzn3kGUHWlb6EK08yFBJeZ0gWDzT0M7p_ryqL73NYwvzsdh9OEeJ8b-Q6Hoq1w"
+  let accessToken = "BQCXa1oz5tkMdLVXbHxMHMfEqNHdOSPPV3p58IkuAot0tuyUGrfkfE376GI5itbO3ynlbu92SFDedb7VXowDOTJ0qlWZz5g0r6L3frgqfTR_R3cXVZtTwRzhThjDW-yE_Uil5piZOQw7sM74hv9FPMB8bYq_QWk"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -205,6 +205,11 @@ function callSeatGeek() {
 }
 
 
+String.prototype.replaceAll = function (search, replacement) {
+  var target = this;
+  return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 //WORKFLOW
 
 //populate dropdown with buttons per genre
@@ -222,8 +227,10 @@ function getButtons() {
 
   //add button   for each element in de-duplicated array
   genresDeduplicated.forEach(genre => {
-    
-    var genreDash = genre.replace(" ", "-");
+
+    //TODO: only add first genre as data
+    var genreDash = genre.replaceAll(" ", "-");
+
     let html =
       `
       <a class="dropdown-item" data-name=".${genreDash}">${genre}</a>
@@ -234,9 +241,12 @@ function getButtons() {
 
   //repeat for cities
   citiesDeduplicated.forEach(city => {
+
+    var cityDash = city.replaceAll(" ", "-");
+
     let html =
       `
-    <a class="dropdown-item" data-name=".${city}">${city}</a>
+    <a class="dropdown-item" data-name=".${cityDash}">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
     $('#cities-in-dropdown-sm').append(html);
@@ -245,6 +255,7 @@ function getButtons() {
 
 $("#launch-button").on("click", function () {
   let proceed = validateInput();
+
   if (proceed) {
     callSeatGeek();
     bounceOut("#landingPage")
@@ -260,7 +271,24 @@ $("#launch-button").on("click", function () {
   }
 })
 
+//RESTAURANT SELECTION PAGE
+$("#prices-button a").on("click", function () {
 
+  var sort = $(this).attr('data-name');
+  console.log("test" + sort);
+  if (sort === "a")
+    $grid.isotope({
+      sortBy: "price"
+    });
+
+  if (sort === "d")
+    $grid.isotope({
+
+      sortBy: "price",
+      sortAscending: false
+    });
+});
+//RESTAURANT SELECTION PAGE
 
 function loadEvents() {
 
@@ -296,9 +324,8 @@ function loadEvents() {
 
       //replace spaces for class names
       let cityForClass = event.city;
-      for (let i = 0; i < cityForClass.length; i++) {
-        cityForClass = cityForClass.replace(" ", "-");
-      }
+      cityForClass = cityForClass.replaceAll(" ", "-");
+
 
       //note: if you hit an error here...
       ///might be because you don't have a spotify token
@@ -306,58 +333,66 @@ function loadEvents() {
       ///to spotify data
 
       let genreForClass = event.genres[0];
-      for (let i = 0; i < genreForClass.length; i++) {
-        genreForClass = genreForClass.replace(" ", "-");
-      }
 
-  //CHECK THIS OUT AFTER MERGER    
-  $("#get-data").on('click', function () {
+      const genreClasses = event.genres.map(g => g.replaceAll(" ", "-"))
 
-  loadEvents();
-
-  var $grid = $('.grid').isotope({
-    // options
-    itemSelector: '.grid-item',
-    layoutMode: 'fitRows',
-    getSortData: {
-      rating: ".datum-restRating parseFloat",
-      price: ".datum-restCost parseInt"
-  },
-  });
-
-
-  $("#sort-options a").on("click", function () {
-
-    var value = $(this).attr('data-name');
-    console.log(value);
-    $grid.isotope ({
-  
-      filter: value,
-  
-      
-    });
-  
-  })
-
-});
-
-
-
-$(document).on("click", ".restBtn", function() {
-    let eventTile = $("<div>")
+      let eventTile = $("<div>")
         .attr('id', 'event-wrapper-' + index)
         .addClass('event-wrapper grid-item')
-        .addClass(genreForClass)
+        .addClass(genreClasses.join(' '))
         .addClass(cityForClass)
         .css('background-color', color)
         .html(html);
 
       $("#event-container").append(eventTile);
     });
+
     //after events loaded, loop through events for genres
     getButtons();
   }, 2000)
-};
+}
+
+
+
+$("#genres-in-dropdown").on("click", ".dropdown-item", function () {
+  console.log(this);
+
+  var $grid = $('.grid').isotope({
+    // options
+    itemSelector: '.grid-item',
+    layoutMode: 'masonry',
+  });
+
+  var value = $(this).attr('data-name');
+  console.log(value);
+
+  $grid.isotope({
+    filter: value,
+  });
+
+});
+
+//
+
+// var $grid = $('.grid').isotope({
+//   // options
+//   itemSelector: '.grid-item',
+//   layoutMode: 'fitRows',
+//   getSortData: {
+//     rating: ".datum-restRating parseFloat",
+//     price: ".datum-restCost parseInt"
+//   },
+// });
+
+
+// $grid.isotope({
+
+//   sortBy: "rating",
+//   sortAscending: false
+
+// });
+
+
 
 $(document).on("click", ".restBtn-0", function () {
   bounceOut("#sort-page")
@@ -413,46 +448,10 @@ $(document).on("click", ".restBtn-0", function () {
       $("#restTable").append(restEventTile);
 
     }
-    var $grid = $('.grid').isotope({
-      // options
-      itemSelector: '.grid-item',
-      layoutMode: 'fitRows',
-      getSortData: {
-        rating: ".datum-restRating parseFloat",
-        price: ".datum-restCost parseInt"
-    },
-    });
-  
-
-      $grid.isotope ({
-
-      sortBy: "rating",
-      sortAscending: false
-
-      });
-
-      $("#prices-button a").on("click", function () {
-
-        var sort = $(this).attr('data-name');
-        console.log("test" +sort);
-        if(sort === "a")
-        $grid.isotope ({
-      
-          sortBy: "price"
-        });
-      
-        if(sort === "d")
-        $grid.isotope ({
-      
-          sortBy: "price",
-          sortAscending: false
-        });
-      })
-
   })
-})
+});
 
- $(document).on("click", ".restBtn-1", function () {
+$(document).on("click", ".restBtn-1", function () {
   bounceOut("#sort-page")
   bounceIn('#restaurants');
   let plansAddress = $("#datum-address-1").text()
@@ -506,9 +505,9 @@ $(document).on("click", ".restBtn-0", function () {
       $("#restTable").append(restEventTile);
     }
   })
-}) 
+})
 
- $(document).on("click", ".restBtn-2", function () {
+$(document).on("click", ".restBtn-2", function () {
   bounceOut("#sort-page")
   bounceIn('#restaurants');
   let plansAddress = $("#datum-address-2").text()
@@ -954,7 +953,7 @@ $(document).on("click", ".restBtn-9", function () {
       $("#restTable").append(restEventTile);
     }
   })
-}) 
+})
 
 $(document).on("click", ".restBtn-10", function () {
   bounceOut("#sort-page")
@@ -1012,7 +1011,7 @@ $(document).on("click", ".restBtn-10", function () {
   })
 })
 
- $(document).on("click", ".restBtn-11", function () {
+$(document).on("click", ".restBtn-11", function () {
   bounceOut("#sort-page")
   bounceIn('#restaurants');
   let plansAddress = $("#datum-address-11").text()
@@ -1066,9 +1065,9 @@ $(document).on("click", ".restBtn-10", function () {
       $("#restTable").append(restEventTile);
     }
   })
-}) 
+})
 
- $(document).on("click", ".restBtn-12", function () {
+$(document).on("click", ".restBtn-12", function () {
   bounceOut("#sort-page")
   bounceIn('#restaurants');
   let plansAddress = $("#datum-address-12").text()
@@ -1514,7 +1513,7 @@ $(document).on("click", ".restBtn-19", function () {
       $("#restTable").append(restEventTile);
     }
   })
-}) 
+})
 
 $(document).on("click", ".finalPageBtn", function () {
   bounceOut("#restaurants")
@@ -1544,7 +1543,7 @@ $(document).on("click", ".finalPageBtn", function () {
     `
   )
 
-})
+});
 
 //DISPLAY
 
@@ -1563,7 +1562,7 @@ function bounceOut(section) {
   setTimeout(function () {
     $(section).removeClass("bounceOutUp")
     $(section).css("display", "none");
-  },600);
+  }, 600);
 }
 
 $(document.body).on('click', '#sort-page-back', function () {
@@ -1596,4 +1595,4 @@ $(document.body).on('click', '#last-page-back', function () {
 
 $(document).ready(function () {
   bounceIn("#landingPage");
-})
+});
