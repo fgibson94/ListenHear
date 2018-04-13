@@ -111,6 +111,13 @@ body{
     margin: 20px auto;
 }
 
+#restTable {
+    width: 80vw;
+    height:auto;
+    margin-left:10vw;
+    margin-right:10vw;
+}
+
 /* might not actually need this... 
     mighta been needed because there was a src/href mixup */
 .btn-group>.btn:not(:last-child):not(.dropdown-toggle){

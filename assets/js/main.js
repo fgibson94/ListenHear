@@ -1575,7 +1575,10 @@ $("#cuisines-in-dropdown").on("click", ".dropdown-item", function () {
   var $grid = $('.grid').isotope({
     // options
     itemSelector: '.grid-item',
-    layoutMode: 'masonry',
+    layoutMode: "fitRows",
+    fitRows:{
+      columnWidth: 300
+  }      
   });
 
   var value = $(this).attr('data-cuisine');
