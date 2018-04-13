@@ -94,7 +94,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQD1uCAavsIcPv7KDlOgRTo6OxhY-vzY0ihnYL_fCs4ARfUp8QUdjIzs0liKgv91Ta4f8v8Qa6h50jikGGNITtOrWtF1pOZ8OVwNVG_mqoHO2td2ZfsStg78hOF-ka7zzgXLxZVtcnsc_D-ltgmbrCH8EWyrSYQV_HW7-4jtdSBCQbotCQ"
+  let accessToken = "BQDchOwNbNsy7F2f1eX08TV7RbwSJ2yzFhLJ_AJWj3kr0ayPv594DEEIk-rTuuek0eBYZMDr_dGSn-V3I7PrWPPbJ4UcwXO3ZepvaD-x2Ni0oGLORx_5p_x8gZ3i6y58VMm6zV_ZB1Bal9QTHyMESnIgjkG3Lgg"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -290,24 +290,6 @@ $("#launch-button").on("click", function () {
   }
 })
 
-
-// $("#prices-button a").on("click", function () {
-
-//   var sort = $(this).attr('data-name');
-//   console.log("test" + sort);
-//   if (sort === "a")
-//     $grid.isotope({
-//       sortBy: "price"
-//     });
-
-//   if (sort === "d")
-//     $grid.isotope({
-
-//       sortBy: "price",
-//       sortAscending: false
-//     });
-// });
-
 function loadEvents() {
 
   setTimeout(function () {
@@ -338,8 +320,6 @@ function loadEvents() {
       <div id="datum-lat-${index}" class="datum-lat" style="display: none;">${event.lat}</div>
       <div id="datum-lon-${index}" class="datum-lon" style="display: none;">${event.lon}</div>
       `;
-
-      console.log("datum-ticket-"+index+" ", event.tickets);
 
       //replace spaces for class names
       let cityForClass = event.city;
@@ -389,17 +369,13 @@ $(document).on("click", ".restBtn-0", function () {
     method: "GET"
   }).then(function (response) {
     session.RESTAURANT_ARR = [];
-    console.log("zomato ", response)
+    //console.log("zomato ", response)
     for (var i = 0; i < response.restaurants.length; i++) {
       let restName = response.restaurants[i].restaurant.name
       let restAdd = response.restaurants[i].restaurant.location.address
       let restLat = response.restaurants[i].restaurant.location.latitude
       let restLon = response.restaurants[i].restaurant.location.longitude
       let restType = response.restaurants[i].restaurant.cuisines
-
-      let cuisinesAry = restType.split(", ");
-      let oneCuisine = cuisinesAry[0];
-
       let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
       let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
       //console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
@@ -421,6 +397,8 @@ $(document).on("click", ".restBtn-0", function () {
           <div class="datum-restLon" style="display: none;">${restLon}</div>
           `;
 
+      let cuisinesAry = restType.split(", ");
+
       let restaurant = {
         name: restName,
         address: restAdd,
@@ -428,13 +406,14 @@ $(document).on("click", ".restBtn-0", function () {
         cost: restCostForTwo
       };
 
-      console.log(restaurant.cuisine);
-
       session.RESTAURANT_ARR.push(restaurant);
+
+      let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+      cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
 
       let restEventTile = $("<div>")
         .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item ' + oneCuisine)
+        .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
         .css('background-color', "#ffdead")
         .html(restHtml);
 
@@ -1576,9 +1555,9 @@ $("#cuisines-in-dropdown").on("click", ".dropdown-item", function () {
     // options
     itemSelector: '.grid-item',
     layoutMode: "fitRows",
-    fitRows:{
+    fitRows: {
       columnWidth: 300
-  }      
+    }
   });
 
   var value = $(this).attr('data-cuisine');
@@ -1598,9 +1577,9 @@ $("#genres-in-dropdown").on("click", ".dropdown-item", function () {
     // options
     itemSelector: '.grid-item',
     layoutMode: "fitRows",
-    fitRows:{
+    fitRows: {
       columnWidth: 300
-  }      
+    }
   });
 
   var value = $(this).attr('data-genre');
@@ -1620,9 +1599,9 @@ $("#cities-in-dropdown").on("click", ".dropdown-item", function () {
     // options
     itemSelector: '.grid-item',
     layoutMode: "fitRows",
-    fitRows:{
+    fitRows: {
       columnWidth: 300
-  }      
+    }
   });
 
   var value = $(this).attr('data-city');
