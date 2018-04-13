@@ -1,12 +1,10 @@
-
-
-
 let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
 
 let session = {
   zip: '',
   radius: '',
   EVENT_ARR: [],
+  RESTAURANT_ARR: [],
 }
 
 //HELPER FUNCTIONS
@@ -96,7 +94,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQCXa1oz5tkMdLVXbHxMHMfEqNHdOSPPV3p58IkuAot0tuyUGrfkfE376GI5itbO3ynlbu92SFDedb7VXowDOTJ0qlWZz5g0r6L3frgqfTR_R3cXVZtTwRzhThjDW-yE_Uil5piZOQw7sM74hv9FPMB8bYq_QWk"
+  let accessToken = "BQDJruJ212l4EfeF4-HnzXJirw_OTxk-60ieS4fKkj3DfjEqL5DrIjazP-3XiAYxW2LkIqfHcMJjygSjpwlsvIJhPWzM3ClvRI6kslBQI5NON1PypdVKwIVIBnERnfQAZduJ_8Jhc_5Au7__8vDhYDo4fxhVJUE"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -129,7 +127,7 @@ function callSpotify() {
 
   setTimeout(function () {
     session.EVENT_ARR.forEach(event => {
-      console.log("spotify tracks being called")
+      // console.log("spotify tracks being called")
       $.ajax({
         url: "https://api.spotify.com/v1/artists/" + event.spotifyId + "/top-tracks?country=US",
         headers: {
@@ -204,16 +202,14 @@ function callSeatGeek() {
   })
 }
 
-
+//replace function that handles all char replacements (not just 1)
 String.prototype.replaceAll = function (search, replacement) {
   var target = this;
   return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-//WORKFLOW
-
-//populate dropdown with buttons per genre
-function getButtons() {
+//populate music dropdown with buttons per genre
+function getMusicButtons() {
 
   //for genres and cities
   //map session.EVENT_ARR to a new array
@@ -233,7 +229,7 @@ function getButtons() {
 
     let html =
       `
-      <a class="dropdown-item" data-name=".${genreDash}">${genre}</a>
+      <a class="dropdown-item" data-genre=".${genreDash}">${genre}</a>
       `
     $('#genres-in-dropdown').append(html);
     $('#genres-in-dropdown-sm').append(html);
@@ -246,10 +242,33 @@ function getButtons() {
 
     let html =
       `
-    <a class="dropdown-item" data-name=".${cityDash}">${city}</a>
+    <a class="dropdown-item" data-city=".${cityDash}">${city}</a>
     `
     $('#cities-in-dropdown').append(html);
     $('#cities-in-dropdown-sm').append(html);
+  });
+}
+
+//populate restaurant dropdown with buttons per cuisines
+function getRestaurantButtons() {
+
+  const cuisinesDeduplicated = session.RESTAURANT_ARR
+    .map(value => value.cuisine[0])
+    .filter((value, index, arr) => arr.indexOf(value) === index);
+
+  //console.log(cuisinesDeduplicated);
+
+  //repeat for cities
+  cuisinesDeduplicated.forEach(cuisine => {
+    cuisineDash = cuisine.replaceAll(" ", "-");
+    //console.log("cuisineDash ", cuisineDash)
+
+    let html =
+      `
+    <a class="dropdown-item" data-cuisine=".${cuisineDash}">${cuisine}</a>
+    `
+    $('#cuisines-in-dropdown').append(html);
+    $('#cuisines-in-dropdown-sm').append(html);
   });
 }
 
@@ -271,29 +290,27 @@ $("#launch-button").on("click", function () {
   }
 })
 
-//RESTAURANT SELECTION PAGE
-$("#prices-button a").on("click", function () {
 
-  var sort = $(this).attr('data-name');
-  console.log("test" + sort);
-  if (sort === "a")
-    $grid.isotope({
-      sortBy: "price"
-    });
+// $("#prices-button a").on("click", function () {
 
-  if (sort === "d")
-    $grid.isotope({
+//   var sort = $(this).attr('data-name');
+//   console.log("test" + sort);
+//   if (sort === "a")
+//     $grid.isotope({
+//       sortBy: "price"
+//     });
 
-      sortBy: "price",
-      sortAscending: false
-    });
-});
-//RESTAURANT SELECTION PAGE
+//   if (sort === "d")
+//     $grid.isotope({
+
+//       sortBy: "price",
+//       sortAscending: false
+//     });
+// });
 
 function loadEvents() {
 
   setTimeout(function () {
-    console.log("event load started")
     $("#event-container").html("");
     session.EVENT_ARR.forEach(event => {
       let randomNum = Math.round(Math.random() * colors.length);
@@ -322,10 +339,11 @@ function loadEvents() {
       <div id="datum-lon-${index}" class="datum-lon" style="display: none;">${event.lon}</div>
       `;
 
+      console.log("datum-ticket-"+index+" ", event.tickets);
+
       //replace spaces for class names
       let cityForClass = event.city;
       cityForClass = cityForClass.replaceAll(" ", "-");
-
 
       //note: if you hit an error here...
       ///might be because you don't have a spotify token
@@ -348,51 +366,9 @@ function loadEvents() {
     });
 
     //after events loaded, loop through events for genres
-    getButtons();
+    getMusicButtons();
   }, 2000)
 }
-
-
-
-$("#genres-in-dropdown").on("click", ".dropdown-item", function () {
-  console.log(this);
-
-  var $grid = $('.grid').isotope({
-    // options
-    itemSelector: '.grid-item',
-    layoutMode: 'masonry',
-  });
-
-  var value = $(this).attr('data-name');
-  console.log(value);
-
-  $grid.isotope({
-    filter: value,
-  });
-
-});
-
-//
-
-// var $grid = $('.grid').isotope({
-//   // options
-//   itemSelector: '.grid-item',
-//   layoutMode: 'fitRows',
-//   getSortData: {
-//     rating: ".datum-restRating parseFloat",
-//     price: ".datum-restCost parseInt"
-//   },
-// });
-
-
-// $grid.isotope({
-
-//   sortBy: "rating",
-//   sortAscending: false
-
-// });
-
-
 
 $(document).on("click", ".restBtn-0", function () {
   bounceOut("#sort-page")
@@ -403,7 +379,7 @@ $(document).on("click", ".restBtn-0", function () {
   let plansLon = $("#datum-lon-0").text()
   let plansTicketLink = $("#datum-ticket").text()
   $("#ticketLink").text(plansTicketLink)
-  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  //console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
   var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
   $.ajax({
     url: queryURLZomato,
@@ -412,6 +388,7 @@ $(document).on("click", ".restBtn-0", function () {
     },
     method: "GET"
   }).then(function (response) {
+    session.RESTAURANT_ARR = [];
     console.log("zomato ", response)
     for (var i = 0; i < response.restaurants.length; i++) {
       let restName = response.restaurants[i].restaurant.name
@@ -419,9 +396,13 @@ $(document).on("click", ".restBtn-0", function () {
       let restLat = response.restaurants[i].restaurant.location.latitude
       let restLon = response.restaurants[i].restaurant.location.longitude
       let restType = response.restaurants[i].restaurant.cuisines
+
+      let cuisinesAry = restType.split(", ");
+      let oneCuisine = cuisinesAry[0];
+
       let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
       let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
-      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
+      //console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
       let restCost = Math.floor(restCostForTwo / 2);
       let restHtml =
         `
@@ -439,15 +420,29 @@ $(document).on("click", ".restBtn-0", function () {
           <div class="datum-restLat" style="display: none;">${restLat}</div>
           <div class="datum-restLon" style="display: none;">${restLon}</div>
           `;
+
+      let restaurant = {
+        name: restName,
+        address: restAdd,
+        cuisine: cuisinesAry,
+        cost: restCostForTwo
+      };
+
+      console.log(restaurant.cuisine);
+
+      session.RESTAURANT_ARR.push(restaurant);
+
       let restEventTile = $("<div>")
         .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
+        .addClass('event-wrapper grid-item ' + oneCuisine)
         .css('background-color', "#ffdead")
         .html(restHtml);
 
       $("#restTable").append(restEventTile);
 
-    }
+
+    };
+    getRestaurantButtons();
   })
 });
 
@@ -460,7 +455,7 @@ $(document).on("click", ".restBtn-1", function () {
   let plansLon = $("#datum-lon-1").text()
   let plansTicketLink = $("#datum-ticket-1").text()
   $("#ticketLink").text(plansTicketLink)
-  console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
+  //console.log(plansAddress, " ", plansCity, " ", plansLat, " ", plansLon, " ", plansTicketLink)
   var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + plansLat + "&lon=" + plansLon + "&radius=1&sort=real_distance&order=asc"
   $.ajax({
     url: queryURLZomato,
@@ -469,7 +464,7 @@ $(document).on("click", ".restBtn-1", function () {
     },
     method: "GET"
   }).then(function (response) {
-    console.log("zomato ", response)
+    //console.log("zomato ", response)
     for (var i = 0; i < response.restaurants.length; i++) {
       let restName = response.restaurants[i].restaurant.name
       let restAdd = response.restaurants[i].restaurant.location.address
@@ -1545,8 +1540,68 @@ $(document).on("click", ".finalPageBtn", function () {
 
 });
 
+
 //DISPLAY
 
+//ISOTOPE FEATURES
+//isotope filter for cuisines
+$("#cuisines-in-dropdown").on("click", ".dropdown-item", function () {
+  //console.log(this);
+
+  var $grid = $('.grid').isotope({
+    // options
+    itemSelector: '.grid-item',
+    layoutMode: 'masonry',
+  });
+
+  var value = $(this).attr('data-cuisine');
+  //console.log(value);
+
+  $grid.isotope({
+    filter: value,
+  });
+
+});
+
+//isotope filter for genre
+$("#genres-in-dropdown").on("click", ".dropdown-item", function () {
+  //console.log(this);
+
+  var $grid = $('.grid').isotope({
+    // options
+    itemSelector: '.grid-item',
+    layoutMode: 'masonry',
+  });
+
+  var value = $(this).attr('data-genre');
+  //console.log(value);
+
+  $grid.isotope({
+    filter: value,
+  });
+
+});
+
+//isotope cities for genre
+$("#cities-in-dropdown").on("click", ".dropdown-item", function () {
+  //console.log(this);
+
+  var $grid = $('.grid').isotope({
+    // options
+    itemSelector: '.grid-item',
+    layoutMode: 'masonry',
+  });
+
+  var value = $(this).attr('data-city');
+  //console.log(value);
+
+  $grid.isotope({
+    filter: value,
+  });
+
+});
+
+//TRANSITIONS
 //transition in section
 function bounceIn(section) {
   setTimeout(function () {
@@ -1565,6 +1620,7 @@ function bounceOut(section) {
   }, 600);
 }
 
+//CLICK FEATURES
 $(document.body).on('click', '#sort-page-back', function () {
   bounceOut('#sort-page');
   setTimeout(function () {
@@ -1572,26 +1628,27 @@ $(document.body).on('click', '#sort-page-back', function () {
   }, 500);
 });
 
-$(document.body).on('click', '#sort-page-back-sm', function () {
-  bounceOut('#sort-page');
-  setTimeout(function () {
-    bounceIn('#landingPage');
-  }, 500);
-});
+//FOR UNIMPLEMENTED BACK BUTTONS
+// $(document.body).on('click', '#sort-page-back-sm', function () {
+//   bounceOut('#sort-page');
+//   setTimeout(function () {
+//     bounceIn('#landingPage');
+//   }, 500);
+// });
 
-$(document.body).on('click', '#restaurants-page-back', function () {
-  bounceOut('#restaurants');
-  setTimeout(function () {
-    bounceIn('#sort-page');
-  }, 500);
-});
+// $(document.body).on('click', '#restaurants-page-back', function () {
+//   bounceOut('#restaurants');
+//   setTimeout(function () {
+//     bounceIn('#sort-page');
+//   }, 500);
+// });
 
-$(document.body).on('click', '#last-page-back', function () {
-  bounceOut('#finalPage');
-  setTimeout(function () {
-    bounceIn('#restaurants');
-  }, 500);
-});
+// $(document.body).on('click', '#last-page-back', function () {
+//   bounceOut('#finalPage');
+//   setTimeout(function () {
+//     bounceIn('#restaurants');
+//   }, 500);
+// });
 
 $(document).ready(function () {
   bounceIn("#landingPage");
