@@ -94,7 +94,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQDJruJ212l4EfeF4-HnzXJirw_OTxk-60ieS4fKkj3DfjEqL5DrIjazP-3XiAYxW2LkIqfHcMJjygSjpwlsvIJhPWzM3ClvRI6kslBQI5NON1PypdVKwIVIBnERnfQAZduJ_8Jhc_5Au7__8vDhYDo4fxhVJUE"
+  let accessToken = "BQD1uCAavsIcPv7KDlOgRTo6OxhY-vzY0ihnYL_fCs4ARfUp8QUdjIzs0liKgv91Ta4f8v8Qa6h50jikGGNITtOrWtF1pOZ8OVwNVG_mqoHO2td2ZfsStg78hOF-ka7zzgXLxZVtcnsc_D-ltgmbrCH8EWyrSYQV_HW7-4jtdSBCQbotCQ"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -440,7 +440,6 @@ $(document).on("click", ".restBtn-0", function () {
 
       $("#restTable").append(restEventTile);
 
-
     };
     getRestaurantButtons();
   })
@@ -499,6 +498,7 @@ $(document).on("click", ".restBtn-1", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -555,6 +555,7 @@ $(document).on("click", ".restBtn-2", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -611,6 +612,7 @@ $(document).on("click", ".restBtn-3", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -667,6 +669,7 @@ $(document).on("click", ".restBtn-4", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -723,6 +726,7 @@ $(document).on("click", ".restBtn-5", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -779,6 +783,7 @@ $(document).on("click", ".restBtn-6", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -835,6 +840,7 @@ $(document).on("click", ".restBtn-7", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -891,6 +897,7 @@ $(document).on("click", ".restBtn-8", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -947,6 +954,7 @@ $(document).on("click", ".restBtn-9", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -1003,6 +1011,7 @@ $(document).on("click", ".restBtn-10", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -1059,6 +1068,7 @@ $(document).on("click", ".restBtn-11", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -1115,6 +1125,7 @@ $(document).on("click", ".restBtn-12", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -1171,6 +1182,8 @@ $(document).on("click", ".restBtn-13", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
+
   })
 })
 
@@ -1227,6 +1240,8 @@ $(document).on("click", ".restBtn-14", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
+
   })
 })
 
@@ -1283,6 +1298,8 @@ $(document).on("click", ".restBtn-15", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
+
   })
 })
 
@@ -1339,6 +1356,8 @@ $(document).on("click", ".restBtn-16", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
+
   })
 })
 
@@ -1395,6 +1414,8 @@ $(document).on("click", ".restBtn-17", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
+
   })
 })
 
@@ -1451,6 +1472,8 @@ $(document).on("click", ".restBtn-18", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
+
   })
 })
 
@@ -1507,6 +1530,7 @@ $(document).on("click", ".restBtn-19", function () {
 
       $("#restTable").append(restEventTile);
     }
+    getRestaurantButtons();
   })
 })
 
@@ -1570,7 +1594,10 @@ $("#genres-in-dropdown").on("click", ".dropdown-item", function () {
   var $grid = $('.grid').isotope({
     // options
     itemSelector: '.grid-item',
-    layoutMode: 'masonry',
+    layoutMode: "fitRows",
+    fitRows:{
+      columnWidth: 300
+  }      
   });
 
   var value = $(this).attr('data-genre');
@@ -1589,7 +1616,10 @@ $("#cities-in-dropdown").on("click", ".dropdown-item", function () {
   var $grid = $('.grid').isotope({
     // options
     itemSelector: '.grid-item',
-    layoutMode: 'masonry',
+    layoutMode: "fitRows",
+    fitRows:{
+      columnWidth: 300
+  }      
   });
 
   var value = $(this).attr('data-city');

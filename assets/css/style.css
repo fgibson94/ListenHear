@@ -57,8 +57,23 @@ body{
     background-color:rosybrown;
     padding:2px;
     margin:5px;
-    font-family: 'Poppins';
     font-weight: 500;
+  }
+
+  .grid {
+    background: transparent;
+    max-width: 1200px;
+    height:auto;
+  }
+  
+  
+  /* ---- .grid-item ---- */
+  
+  .grid-item {
+    float: left;
+    font-family: 'Lato', sans-serif;
+    border: 2px solid #333;
+    border-color: hsla(0, 0%, 0%, 0.7);
   }
 
 #loadingImg {
