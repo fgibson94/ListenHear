@@ -71,6 +71,10 @@ body{
     display:none;
 }
 
+#sort-options-wrapper-rest-sm{
+    display:none;
+}
+
 .sm-dropdown-width{
     width:100%;
     margin-top:4px;
@@ -100,14 +104,6 @@ body{
 
 @media screen and (max-width: 500px) {
 
-    #sort-options-wrapper-lg{
-        display:none;
-    }
-
-    #sort-options-wrapper-sm{
-        display:block;
-    }
-
     .appTitle{
       font-size:4.5em;
     }
@@ -118,6 +114,23 @@ body{
 }
 
 @media screen and (max-width: 400px) {
+
+    /* #sort-options-wrapper-lg{
+        display:none;
+    }
+
+    #sort-options-wrapper-sm{
+        display:block;
+    }
+
+    #sort-options-wrapper-rest-lg{
+        display:none;
+    }
+
+    #sort-options-wrapper-rest-sm{
+        display:block;
+    } */
+
 
     .appTitle{
       font-size:3.2em;
