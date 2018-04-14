@@ -5,8 +5,6 @@ let session = {
   radius: '',
   EVENT_ARR: [],
   RESTAURANT_ARR: [],
-  event:[],
-  restaurant: [],
 }
 
 //HELPER FUNCTIONS
@@ -258,8 +256,6 @@ function getRestaurantButtons() {
     .map(value => value.cuisine)
     .filter((value, index, arr) => arr.indexOf(value) === index);
 
-  console.log("cuisinesDedup", cuisinesDeduplicated);
-
   //repeat for cities
   cuisinesDeduplicated.forEach(cuisine => {
 
@@ -366,9 +362,6 @@ $(document).on("click", ".make-plans-button", function () {
   let venueLon = $(eventWrapper).find('.event-lon').text();
   let venueTicketLink = $(eventWrapper).find('.event-ticket').text();
 
-  console.log('venue lat ', venueLat);
-  console.log('venue lon ', venueLon);
-
   var queryURLZomato = "https://developers.zomato.com/api/v2.1/search?lat=" + venueLat + "&lon=" + venueLon + "&radius=1&sort=real_distance&order=asc"
   $.ajax({
     url: queryURLZomato,
@@ -468,7 +461,6 @@ $(document).on("click", ".finalPageBtn", function () {
 //ISOTOPE FEATURES
 //isotope filter for cuisines
 $("#cuisines-in-dropdown").on("click", ".dropdown-item", function () {
-  //console.log(this);
 
   var $grid = $('.grid').isotope({
     // options
@@ -480,7 +472,6 @@ $("#cuisines-in-dropdown").on("click", ".dropdown-item", function () {
   });
 
   var value = $(this).attr('data-cuisine');
-  //console.log(value);
 
   $grid.isotope({
     filter: value,
@@ -490,7 +481,6 @@ $("#cuisines-in-dropdown").on("click", ".dropdown-item", function () {
 
 //isotope filter for genre
 $("#genres-in-dropdown").on("click", ".dropdown-item", function () {
-  //console.log(this);
 
   var $grid = $('.grid').isotope({
     // options
@@ -502,7 +492,6 @@ $("#genres-in-dropdown").on("click", ".dropdown-item", function () {
   });
 
   var value = $(this).attr('data-genre');
-  //console.log(value);
 
   $grid.isotope({
     filter: value,
@@ -512,7 +501,6 @@ $("#genres-in-dropdown").on("click", ".dropdown-item", function () {
 
 //isotope cities for genre
 $("#cities-in-dropdown").on("click", ".dropdown-item", function () {
-  //console.log(this);
 
   var $grid = $('.grid').isotope({
     // options
@@ -524,7 +512,6 @@ $("#cities-in-dropdown").on("click", ".dropdown-item", function () {
   });
 
   var value = $(this).attr('data-city');
-  //console.log(value);
 
   $grid.isotope({
     filter: value,
