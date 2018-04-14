@@ -94,7 +94,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQDchOwNbNsy7F2f1eX08TV7RbwSJ2yzFhLJ_AJWj3kr0ayPv594DEEIk-rTuuek0eBYZMDr_dGSn-V3I7PrWPPbJ4UcwXO3ZepvaD-x2Ni0oGLORx_5p_x8gZ3i6y58VMm6zV_ZB1Bal9QTHyMESnIgjkG3Lgg"
+  let accessToken = "BQBMTxOtmBxgZirUgmvqu8faZOSIgchiVV81dsx_8v_9qxCtWRmSN-mb8mFeLqZUyWq9y2-S6XMJTbsT2elL9g8_uOMRtiCTLf-C9v5w-Jr6bmh1L75LOGgl_OSwqREWwWGeTQY0f_XJ8wT3xUUZeZCTaTYG2090OVhvEJRLRRJMaV5zfg"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
@@ -451,7 +451,6 @@ $(document).on("click", ".restBtn-1", function () {
       let restType = response.restaurants[i].restaurant.cuisines
       let restCostForTwo = response.restaurants[i].restaurant.average_cost_for_two
       let restRating = response.restaurants[i].restaurant.user_rating.aggregate_rating
-      console.log(restName, " ", restAdd, " ", restType, " ", restCostForTwo, " ", restRating)
       let restCost = Math.floor(restCostForTwo / 2);
       let restHtml =
         `
@@ -469,13 +468,27 @@ $(document).on("click", ".restBtn-1", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -526,13 +539,27 @@ $(document).on("click", ".restBtn-2", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -583,13 +610,27 @@ $(document).on("click", ".restBtn-3", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -640,13 +681,27 @@ $(document).on("click", ".restBtn-4", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -697,13 +752,27 @@ $(document).on("click", ".restBtn-5", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -754,13 +823,27 @@ $(document).on("click", ".restBtn-6", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -811,13 +894,27 @@ $(document).on("click", ".restBtn-7", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -868,13 +965,27 @@ $(document).on("click", ".restBtn-8", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -925,9 +1036,23 @@ $(document).on("click", ".restBtn-9", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
+          let cuisinesAry = restType.split(", ");
+
+      let restaurant = {
+        name: restName,
+        address: restAdd,
+        cuisine: cuisinesAry,
+        cost: restCostForTwo
+      };
+
+      session.RESTAURANT_ARR.push(restaurant);
+
+      let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+      cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+
       let restEventTile = $("<div>")
         .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
+        .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
         .css('background-color', "#ffdead")
         .html(restHtml);
 
@@ -982,13 +1107,27 @@ $(document).on("click", ".restBtn-10", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -1039,13 +1178,27 @@ $(document).on("click", ".restBtn-11", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -1096,13 +1249,27 @@ $(document).on("click", ".restBtn-12", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
@@ -1153,13 +1320,27 @@ $(document).on("click", ".restBtn-13", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
 
@@ -1211,13 +1392,27 @@ $(document).on("click", ".restBtn-14", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
 
@@ -1269,13 +1464,27 @@ $(document).on("click", ".restBtn-15", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
 
@@ -1327,13 +1536,27 @@ $(document).on("click", ".restBtn-16", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
 
@@ -1385,13 +1608,27 @@ $(document).on("click", ".restBtn-17", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
 
@@ -1443,13 +1680,27 @@ $(document).on("click", ".restBtn-18", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
 
@@ -1501,13 +1752,27 @@ $(document).on("click", ".restBtn-19", function () {
           <div id="datum-restLat" style="display: none;">${restLat}</div>
           <div id="datum-restLon" style="display: none;">${restLon}</div>
           `;
-      let restEventTile = $("<div>")
-        .attr('id', 'event-wrapper')
-        .addClass('event-wrapper grid-item')
-        .css('background-color', "#ffdead")
-        .html(restHtml);
+          let cuisinesAry = restType.split(", ");
 
-      $("#restTable").append(restEventTile);
+          let restaurant = {
+            name: restName,
+            address: restAdd,
+            cuisine: cuisinesAry,
+            cost: restCostForTwo
+          };
+    
+          session.RESTAURANT_ARR.push(restaurant);
+    
+          let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
+          cuisineClasses = cuisineClasses.map(cuisine => cuisine.replaceAll(",", ""));
+    
+          let restEventTile = $("<div>")
+            .attr('id', 'event-wrapper')
+            .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
+            .css('background-color', "#ffdead")
+            .html(restHtml);
+    
+          $("#restTable").append(restEventTile);
     }
     getRestaurantButtons();
   })
