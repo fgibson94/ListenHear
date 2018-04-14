@@ -12,14 +12,14 @@ let session = {
 function zipError(errorMessage) {
   $('#zip').val(errorMessage).css('color', 'red');
   setTimeout(function () {
-    $('#zip').val("enter zip").css('color', 'black');
+    $('#zip').val("").css('color', 'black');
   }, 2000);
 };
 
 function radiusError(errorMessage) {
   $('#radius').val(errorMessage).css('color', 'red');
   setTimeout(function () {
-    $('#radius').val("enter zip").css('color', 'black');
+    $('#radius').val("").css('color', 'black');
   }, 2000);
 };
 
@@ -275,7 +275,7 @@ function getRestaurantButtons() {
 $("#launch-button").on("click", function () {
   let proceed = validateInput();
 
-  if (proceed) {
+  if (proceed == true) {
     callSeatGeek();
     bounceOut("#landingPage")
 
