@@ -94,7 +94,7 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQArmuIn4fDvWE11Nna14L5fd44b8Hj9I29zOJ7dgQAa-KQlvopmP5M4oIqBq-EP0DZzLjRTsIbktYm8ZANBkWmfOyXSz0s0WpHtmH-doiaKQY9giE0uB8uBf48jwVWTszZYtminqNMkvekBmYgTLqhq0K1OkDIZ7zU6hNnDj01-ANNhSw"
+  let accessToken = "BQCZ8HI0qipdxZFnF53tDpqTNMv8CSBLSg-r42rnJeJrQO1EFyZuIsXXmH9eZs6L-ab8c2vaj7DSnB8tHuZWjJcx4BxPHMcoeFsBFXLmi59bMxYrKH79kXeHur0vl3QE8SKJOBBst8-DZOScLb41vuTZoz2ZLhV7yHKSft3w6gQAB_o6oA"
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
