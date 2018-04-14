@@ -54,8 +54,7 @@ function validateInput() {
   return true;
 }
 
-// API functions
-
+//check for existence of property before trying to access
 function checkGenre(response, index) {
 
   let k = '';
@@ -76,16 +75,17 @@ function checkGenre(response, index) {
   }
 }
 
+//get rid of events w/o spotifyIDs
 function purgeResponse(index) {
   session.EVENT_ARR.splice(index, 1);
 }
 
+//check for existence of property before trying to access
 function checkId(response, index) {
   let k = '';
   'id' in response.artists.items["0"] ? k = "yup" : k = "nope";
   if (k == 'nope') {
     purgeResponse(index, 1)
-    //session.EVENT_ARR.splice(index, 1);
   } else {
     let spotifyId = response.artists.items["0"].id;
     session.EVENT_ARR[index].spotifyId = spotifyId;
@@ -260,7 +260,6 @@ function getRestaurantButtons() {
   cuisinesDeduplicated.forEach(cuisine => {
 
     cuisineDash = cuisine.replaceAll(" ", "-");
-    //console.log("cuisineDash ", cuisineDash)
 
     let html =
       `
@@ -289,6 +288,7 @@ $("#launch-button").on("click", function () {
   }
 })
 
+//generates event tiles
 function loadEvents() {
 
   setTimeout(function () {
@@ -356,6 +356,7 @@ $(document).on("click", ".make-plans-button", function () {
 
   eventWrapper = $(this).parent().parent().parent();
 
+  //musiv event vars we carry to restaurant tiles
   let venueAddress = $(eventWrapper).find('.event-address').text();
   let venueCity = $(eventWrapper).find('.event-city').text();
   let venueLat = $(eventWrapper).find('.event-lat').text();
@@ -371,7 +372,7 @@ $(document).on("click", ".make-plans-button", function () {
     method: "GET"
   }).then(function (response) {
     session.RESTAURANT_ARR = [];
-    //console.log("zomato ", response)
+
     for (var i = 0; i < response.restaurants.length; i++) {
 
       let cuisines = response.restaurants[i].restaurant.cuisines;
@@ -395,15 +396,15 @@ $(document).on("click", ".make-plans-button", function () {
           <div id="restaurant-cuisine" class="datum-restType">Cuisine: ${cuisines}</div>
           <div id="restaurant-cost" class="datum-restCost cost">Avg Cost: ${restaurant.cost}</div>
           <div id="restaurant-rating" class="datum-restRating rating">Rating: ${restaurant.rating}/5</div>
-          <button class="btn btn-dark finalPageBtn">Choose This One</button>
+          <button class="btn btn-dark directions-button">Choose This One</button>
           <div class="restaurant-address" style="display:none;">${restaurant.address}</div>
+          <div class="restaurant-lat" style="display: none;">${restaurant.lat}</div>
+          <div class="restaurant-lon" style="display: none;">${restaurant.lon}</div>
           <div class="venue-address" style="display: none;">${venueAddress}</div>
           <div class="ticket-link" style="display: none;">${venueTicketLink}</div>
           <div class="venue-city" style="display: none;">${venueCity}</div>
           <div class="venue-lat" style="display: none;">${venueLat}</div>
           <div class="venue-lon" style="display: none;">${venueLon}</div>
-          <div class="restaurant-lat" style="display: none;">${restaurant.lat}</div>
-          <div class="restaurant-lon" style="display: none;">${restaurant.lon}</div>
           `;
 
       let cuisineClasses = cuisinesAry.map(cuisine => cuisine.replaceAll(" ", "-"))
@@ -422,7 +423,8 @@ $(document).on("click", ".make-plans-button", function () {
   })
 });
 
-$(document).on("click", ".finalPageBtn", function () {
+//proceed to directions page
+$(document).on("click", ".directions-button", function () {
   bounceOut("#restaurants")
   bounceIn('#finalPage');
 
@@ -454,9 +456,6 @@ $(document).on("click", ".finalPageBtn", function () {
   )
 
 });
-
-
-//DISPLAY
 
 //ISOTOPE FEATURES
 //isotope filter for cuisines
@@ -519,7 +518,6 @@ $("#cities-in-dropdown").on("click", ".dropdown-item", function () {
 
 });
 
-//TRANSITIONS
 //transition in section
 function bounceIn(section) {
   setTimeout(function () {
