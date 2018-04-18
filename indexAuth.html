@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ListenHear</title>
+  <link rel="icon" href="assets/images/favicon.png">
+  <!-- Add Bootstrap !-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <!---CSS!-->
+  <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Carter+One|Lato" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<!--HTML WIREFRAME!-->
+
+<body>
+  <!--These are the separate pages !-->
+  <section class="container container-fluid animated mx-auto width-mod" id="landingPage">
+      <div>
+        <h1 class="appTitle">ListenHear</h1>
+        <div class="row">
+          <h2 class="formHeader">Whats Your Zipcode?</h2>
+          <input type="text" class="form-control form-control-lg text-center col-12" id="zip" aria-describedby="zipCodeInput"
+            placeholder="zip code" autocomplete="off">
+        </div>
+        <br>
+        <div class="row">
+          <h2 class="formHeader">How Far Will You Travel?</h2>
+          <input type="text" class="form-control form-control-lg text-center col-12" id="radius" placeholder="search radius (miles)"
+            autocomplete="off">
+        </div>
+        <br>
+        <div class="row">
+          <button class="btn btn-lg btn-block btn-dark col-12" id="launch-button">Submit</button>
+        </div>
+  </section>
+
+  <section id="loadingPage" class="animated">
+    <img id="loadingImg" src="assets/images/loadingImg.gif" alt="Loading">
+  </section>
+
+  <section id="sort-page" class="animated container container-fluid mx-auto width-mod">
+      <h1 class="appTitle text-center">Local Shows </h1>
+      <h2>Check Out What's Playing Tonight!</h2>
+    <div id="sort-options-wrapper-lg" class="row">
+      <div id="sort-options" class="btn-group mx-auto" role="group">
+        <button class="no-right-border-radius btn btn-lg btn-dark" id="sort-page-back" type="button">
+          <i class="chevron-left"></i> &lt; Back</button>
+        <div class="dropdown-wrap">
+          <button class="no-border-radius btn btn-lg btn-dark dropdown-toggle" type="button" id="genres-dropdown"
+            data-toggle="dropdown">
+            Genre
+          </button>
+          <div id="genres-in-dropdown" class="dropdown-menu">
+            <a class="dropdown-item">All</a>
+          </div>
+        </div>
+        <div class="dropdown-wrap">
+          <button class="no-left-border-radius btn btn-lg btn-dark dropdown-toggle" type="button" id="cities-dropdown"
+            data-toggle="dropdown">
+            City
+          </button>
+          <div id="cities-in-dropdown" class="dropdown-menu">
+            <a class="dropdown-item">All</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- //response (small set of buttons)
+    <div id="sort-options-wrapper-sm" class="row">
+      <button class="btn btn-lg btn-block btn-dark" "sort-page-back-sm" type="button">
+        <i class="chevron-left"></i> &lt; Back</button>
+      <div class="sm-dropdown-width">
+        <button class="btn btn-lg btn-block btn-dark dropdown-toggle" type="button" id="genres-dropdown-sm" data-toggle="dropdown">
+          Genre
+        </button>
+        <div id="genres-in-dropdown" class="dropdown-menu">
+          <a class="dropdown-item">All</a>
+        </div>
+      </div>
+      <div class="sm-dropdown-width">
+        <button class="btn btn-lg btn-block btn-dark dropdown-toggle" type="button" id="cities-dropdown-sm" data-toggle="dropdown">
+          City
+        </button>
+        <div id="cities-in-dropdown" class="dropdown-menu">
+          <a class="dropdown-item">All</a>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div id="event-container" class="clearfix isotope grid" style="width: 80vw"></div>
+  </section>
+
+  <section id="restaurants" class="animated">
+    <h1 class="appTitle text-center">Restaurants </h1>
+    <h2>Choose where you'd like to have dinner before the show!
+      <br>All options within 1 mile of the venue.</h2>
+
+    <div id="sort-options-wrapper-rest-lg" class="row">
+      <div id="sort-options-rest" class="btn-group mx-auto" role="group">
+        <!-- <button class="btn btn-lg btn-dark" type="button" id="rest-page-back">
+          <i class="chevron-left"></i> &lt; Back</button> -->
+        <div class="dropdown-wrap">
+          <button class="no-border-radius btn btn-lg btn-dark dropdown-toggle" type="button" id="cuisine-dropdown"
+            data-toggle="dropdown">
+            Cuisines
+          </button>
+          <div id="cuisines-in-dropdown" class="dropdown-menu">
+            <a class="dropdown-item">All</a>
+          </div>
+        </div>
+        <!-- <div class="dropdown-wrap">
+          <button class="no-left-border-radius btn btn-lg btn-dark dropdown-toggle" type="button" id="cost-dropdown"
+            data-toggle="dropdown">
+            City
+          </button>
+          <div id="cities-in-dropdown" class="dropdown-menu">
+            <a class="dropdown-item">All</a>
+          </div>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- //response (small set of buttons)
+    <div id="sort-options-wrapper-rest-sm" class="row">
+      <button class="btn btn-lg btn-block btn-dark" id="rest-page-back-sm" type="button">
+        <i class="chevron-left"></i> &lt; Back</button>
+      <div class="sm-dropdown-width">
+        <button class="btn btn-lg btn-block btn-dark dropdown-toggle" type="button" id="cuisine-dropdown-sm"
+          data-toggle="dropdown">
+          Cuisine
+        </button>
+        <div id="cuisines-in-dropdown" class="dropdown-menu">
+          <a class="dropdown-item">All</a>
+        </div>
+      </div>
+      <div class="sm-dropdown-width">
+        <button class="btn btn-lg btn-block btn-dark dropdown-toggle" type="button" id="cost-dropdown-sm" data-toggle="dropdown">
+          Cost
+        </button>
+        <div id="cities-in-dropdown" class="dropdown-menu">
+          <a class="dropdown-item">All</a>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div id="restTable" class="clearfix isotope grid" style="width: 80vw"></div>
+    </section>
+    <div class="row">
+        <div id="event-container" class="clearfix isotope grid" style="width: 80vw"></div>
+    </section>
+
+  </section>
+
+  <section id="finalPage" class="animated">
+    <h1 class="appTitle text-center">Here's What You Need!</h1>
+    <div class="container endPage">
+      <div class="row">
+        <div class="btn-group mx-auto">
+          <!-- <button class="btn btn-lg btn-dark" type="button" id="last-page-back">
+            <i class="chevron-left"></i> &lt; Back</button> -->
+          <a role="button" id="ticketBuy" class="linkTo btn btn-lg btn-dark"></a>
+          <a role="button" id="venueDirect" class="linkTo btn btn-lg btn-dark"></a>
+          <a role="button" id="dinnerDirect" class="linkTo btn btn-lg btn-dark"></a>
+        </div>
+      </div>
+      <div class="row mx-auto">
+      </div>
+      <div class="row mx-auto">
+        <div id="googleMap" class="mx-auto">
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+<!--JAVASCRIPT PSEDUO CODE!-->
+<!-- <script src="assets/javascript/script.js"></script> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+  crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="assets/js/main.js"></script>
+
+
+</html>
