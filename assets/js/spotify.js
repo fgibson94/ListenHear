@@ -1,0 +1,1 @@
+window.location.href = "https://accounts.spotify.com/authorize?client_id=20045e8ee0484962b8818279088669fa&response_type=token&redirect_uri=https://tommyngre.github.io/listen-hear/indexReal&scope=user-read-private";
