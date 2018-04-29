@@ -3,19 +3,11 @@
     display:none;
 }
 
-.app-title {
-    font-family: 'Poppins', sans-serif;
-    color: #343a40;
-    text-shadow: 2px 2px 4px darkslategray;
-    font-weight:900;
-    font-style: italic;
+.appTitle {
+    font-family: 'Fredericka the Great', cursive;
+    text-shadow: 1px 1px 4px darkslategray;
+    font-weight:500;
     font-size:5em;
-}
-
-.form-header{
-    font-family: 'Poppins', sans-serif;
-    color: #343a40;
-    font-weight:400;
 }
 
 section{
@@ -26,22 +18,13 @@ section{
     width: 91%;
 }
 
-h2{
-    font-family: 'Poppins', sans-serif;
-    color: #343a40;
-    font-weight:500;    
-}
-
 body{
-    font-family: 'Poppins', sans-serif;
-    color: #343a40;
-    font-weight:500;
-    /* font-style: italic; */
+    font-family: 'Lato', sans-serif;
     text-align:center;
     width:100vw;
     min-height:100vh;
     max-height:100%;
-    background:linear-gradient(141deg, #DD5E89 0%, #F7BB97 51%, #F7BB97 75%);
+    background:linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
 }
 
 .container{
@@ -88,6 +71,7 @@ body{
   
   .grid-item {
     float: left;
+    font-family: 'Lato', sans-serif;
     border: 2px solid #333;
     border-color: hsla(0, 0%, 0%, 0.7);
   }
@@ -95,7 +79,7 @@ body{
 #loadingImg {
     height:50vh;
     width:auto;
-    margin-top:10vh;
+    margin-top:25vh;
 }
 
 #sort-options-wrapper-sm{
@@ -140,14 +124,14 @@ body{
     color:white;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 500px) {
 
-    .app-title{
-      font-size:3.5em;
+    .appTitle{
+      font-size:4.5em;
     }
 
     h2{
-        font-size: 1.5rem;
+        font-size: 1.9rem;
     }
 }
 
@@ -170,12 +154,12 @@ body{
     } */
 
 
-    .app-title{
-      font-size:3em;
+    .appTitle{
+      font-size:3.2em;
     }
 
     h2{
-        font-size:1.2rem;
+        font-size:1.5rem;
     }
 
 }    
