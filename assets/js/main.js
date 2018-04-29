@@ -1,4 +1,4 @@
-let colors = ['#1be3c9', '#6abd75', '#b986e0', '#32f57d', '#eccd52', '#f198b2'];
+let colors = ['#F4B4CA', '#DD5E89', '#FFCDBC', '#FB906B', '#A7E4C7', '#73CAA0', '#D5F6B5', '#9FE160' ];
 
 let session = {
   zip: '',
@@ -294,8 +294,7 @@ function loadEvents() {
   setTimeout(function () {
     $("#event-container").html("");
     session.EVENT_ARR.forEach(event => {
-      let randomNum = Math.round(Math.random() * colors.length);
-      let color = colors[randomNum];
+      let color = colors[Math.round(Math.random() * colors.length)];
       let index = session.EVENT_ARR.indexOf(event);
       var html =
         `
@@ -374,6 +373,7 @@ $(document).on("click", ".make-plans-button", function () {
     session.RESTAURANT_ARR = [];
 
     for (var i = 0; i < response.restaurants.length; i++) {
+      let color = colors[Math.round(Math.random() * colors.length)];
 
       let cuisines = response.restaurants[i].restaurant.cuisines;
       let cuisinesAry = cuisines.split(", ");
@@ -413,7 +413,7 @@ $(document).on("click", ".make-plans-button", function () {
       let restEventTile = $("<div>")
         .attr('id', 'event-wrapper')
         .addClass('event-wrapper grid-item ' + cuisineClasses.join(" "))
-        .css('background-color', "#ffdead")
+        .css('background-color', color)
         .html(restHtml);
 
       $("#restTable").append(restEventTile);
