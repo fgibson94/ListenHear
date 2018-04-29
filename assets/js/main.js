@@ -1,4 +1,4 @@
-let colors = ['#F4B4CA', '#DD5E89', '#FFCDBC', '#FB906B', '#A7E4C7', '#73CAA0', '#D5F6B5', '#9FE160' ];
+let colors = ['#F4B4CA', '#DD5E89', '#FFCDBC', '#FB906B', '#A7E4C7', '#73CAA0', '#D5F6B5', '#9FE160'];
 
 let session = {
   zip: '',
@@ -94,7 +94,17 @@ function checkId(response, index) {
 }
 
 function callSpotify() {
-  let accessToken = "BQDp9b81_3r20JNM60OFtBqtAHcBdH-j3a8D2ZDoMCX3bEqSGDh-VQGMR7o4dTAczd07pcQtdUJfzsQjHk2wGlf6GqKKqOwXIGb4oih_5Cy6pHebumeDNgDHimSOo49xxdV3tw84z5L8ULOB4o-oD98ODpe7Cfk"
+  // get the param val. Spotify uses anchor tag # in the response from the authorize redirect.
+  let params = document.location.hash;
+  // drop the leading #
+  params = params.substring(1);
+  // new object with for the parameter string. Methods available for the object
+  let urlParams = new URLSearchParams(params);
+  // use the get methods to find the value of the access_token parameter. This is needed for the search API call
+  let accessToken = urlParams.get('access_token');
+  
+  //let accessToken = ''
+  
   session.EVENT_ARR.forEach(event => {
     $.ajax({
       url: "https://api.spotify.com/v1/search?q=" + event.artist + "&type=artist",
